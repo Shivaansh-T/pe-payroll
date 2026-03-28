@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Poonam Emporium</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;font-size:13px;color:#111;background:#f9f9f9}
+.app{max-width:1100px;margin:0 auto;padding:16px}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid #e5e5e5;margin-bottom:14px;background:#fff;padding:12px 16px;border-radius:10px;margin-bottom:14px;border:1px solid #eee}
+.appname{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.tabs{display:flex;border-bottom:1px solid #e5e5e5;margin-bottom:16px;background:#fff;border-radius:10px 10px 0 0;padding:0 8px;border:1px solid #eee;border-bottom:none;gap:2px}
+.tab{padding:10px 16px;font-size:12px;cursor:pointer;border:none;background:none;color:#aaa;border-bottom:3px solid transparent;font-family:sans-serif;font-weight:600;letter-spacing:0.2px}
+.tab.on{color:#111;border-bottom-color:#111}
+.page{display:none}.page.on{display:block}
+.card{background:#fff;border:1px solid #eee;border-radius:10px;padding:16px;margin-bottom:12px}
+.card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:700}
+.btn{padding:6px 13px;font-size:12px;border:1px solid #ddd;border-radius:7px;background:#fff;cursor:pointer;color:#111;font-family:sans-serif;font-weight:500}
+.btn:hover{background:#f5f5f5}
+.btn.p{background:#111;color:#fff;border-color:#111}
+.btn.p:hover{background:#333}
+.btn.sm{padding:3px 9px;font-size:11px}
+.btn.red{color:#c0392b;border-color:#f5b7b1}.btn.red:hover{background:#fdf2f0}
+.btn.grn{color:#1a7a3c;border-color:#a9dfbf}.btn.grn:hover{background:#eafaf1}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;font-size:10px;color:#aaa;font-weight:700;padding:6px 8px;border-bottom:1px solid #eee;white-space:nowrap;background:#fafafa}
+td{padding:9px 8px;border-bottom:1px solid #f5f5f5;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.badge{font-size:10px;padding:2px 8px;border-radius:20px;display:inline-block;font-weight:600}
+.badge.paid{background:#e8f8ee;color:#1a7a3c}
+.badge.pending{background:#fef5e4;color:#b36b00}
+.badge.partial{background:#e8f0fb;color:#1a5fa8}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:999;justify-content:center;align-items:flex-start;padding-top:40px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;padding:20px 24px;width:540px;max-width:96vw;margin-bottom:40px}
+.modal h3{font-size:15px;font-weight:800;margin-bottom:14px;border-bottom:1px solid #eee;padding-bottom:10px}
+.fr{margin-bottom:10px}
+.fr label{display:block;font-size:10px;color:#999;margin-bottom:3px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px}
+.fr input,.fr select,.fr textarea{width:100%;padding:7px 10px;font-size:13px;border:1px solid #ddd;border-radius:7px;background:#fff;color:#111;font-family:sans-serif}
+.fr input[readonly]{background:#f5f5f5;color:#888}
+.fr textarea{resize:vertical;min-height:54px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.mact{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid #eee}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.chip{padding:5px 14px;font-size:12px;border-radius:20px;cursor:pointer;border:1px solid #ddd;background:#f5f5f5;color:#777;font-weight:500}
+.chip.on{background:#111;color:#fff;border-color:#111}
+.chip.done{border-color:#a9dfbf;background:#eafaf1;color:#1a7a3c}
+.chip.done.on{background:#1a7a3c;color:#fff;border-color:#1a7a3c}
+.met{background:#f7f7f7;border-radius:8px;padding:12px 14px}
+.met-l{font-size:10px;color:#aaa;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px}
+.met-v{font-size:19px;font-weight:800}
+.met-v.g{color:#1a7a3c}.met-v.r{color:#c0392b}.met-v.b{color:#1a5fa8}.met-v.a{color:#b36b00}
+.bar-wrap{background:#eee;border-radius:4px;height:6px;margin-top:5px;overflow:hidden}
+.bar-inner{height:100%;background:#1a7a3c;border-radius:4px}
+.info-row{display:flex;justify-content:space-between;font-size:10px;color:#aaa;margin-top:3px}
+.divider{height:1px;background:#eee;margin:12px 0}
+.sec-label{font-size:10px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin:12px 0 8px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f5f5}
+.toggle-row:last-child{border-bottom:none}
+.toggle{width:36px;height:20px;border-radius:10px;background:#ddd;position:relative;cursor:pointer;flex-shrink:0;border:none;transition:background 0.2s}
+.toggle.on{background:#1a7a3c}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left 0.2s}
+.toggle.on::after{left:19px}
+.calc-box{background:#f0f7ff;border:1px solid #cce0ff;border-radius:8px;padding:12px 14px;margin-top:8px}
+.cr{display:flex;justify-content:space-between;padding:3px 0;font-size:12px}
+.cr.tot{font-weight:700;border-top:1px solid #cce0ff;margin-top:5px;padding-top:7px;font-size:13px}
+.cr.ded{color:#c0392b}
+.cr.net{color:#1a7a3c;font-size:15px;font-weight:800}
+.empty{text-align:center;padding:24px;color:#ccc;font-size:12px}
+.tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;background:#eee;color:#777;font-weight:500}
+.section-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:14px 16px;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div id="reminderBanner" style="display:none;background:#fff8e1;border:1px solid #f9ca75;border-radius:9px;padding:12px 16px;margin-bottom:12px;display:none">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+    <div>
+      <div style="font-size:13px;font-weight:700;color:#7d5a00;margin-bottom:6px">&#9888; Monthly checklist</div>
+      <div id="reminderItems" style="font-size:12px;color:#7d5a00;line-height:1.8"></div>
+    </div>
+    <button onclick="dismissReminder()" style="font-size:11px;padding:4px 10px;border:1px solid #f9ca75;border-radius:6px;background:#fff;cursor:pointer;color:#7d5a00;white-space:nowrap;flex-shrink:0">Dismiss for today</button>
+  </div>
+</div>
+<div class="topbar">
+  <div class="appname">&#9632; Poonam Emporium</div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span id="syncLabel" style="font-size:10px;padding:3px 10px;border-radius:20px;background:#e8f8ee;color:#1a7a3c;font-weight:700">saved</span>
+    <button class="btn" onclick="exportData()" title="Download a backup of all your data">&#8659; Export</button>
+    <label class="btn" style="cursor:pointer;margin:0" title="Restore data from a backup file">&#8657; Import<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
+    <button class="btn" onclick="openM('settings')">&#9881; Settings</button>
+    <button class="btn p" onclick="openM('addStaff')">+ Add staff</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="goTab('monthsummary',this)">Monthly payroll</button>
+  <button class="tab" onclick="goTab('monthly',this)">Staff-wise payroll</button>
+  <button class="tab" onclick="goTab('staff',this)">Staff</button>
+  <button class="tab" onclick="goTab('advances',this)">Advances &amp; EMI</button>
+  <button class="tab" onclick="goTab('midlog',this)">Mid-month log</button>
+  <button class="tab" onclick="goTab('actlog',this)">Activity log</button>
+</div>
+
+<!-- STAFF-WISE PAYROLL (read-only history) -->
+<div class="page" id="page-monthly">
+  <div class="chips" id="monthChips"></div>
+  <div id="payrollSheet"></div>
+</div>
+<select id="selMonth" style="display:none"></select>
+
+<!-- MONTHLY PAYROLL (entry point) -->
+<div class="page on" id="page-monthsummary">
+  <div style="display:flex;gap:9px;align-items:center;margin-bottom:13px;flex-wrap:wrap">
+    <select id="sumMonth" style="padding:7px 11px;font-size:12px;border:1px solid #ddd;border-radius:7px;font-weight:600" onchange="renderMonthSummary()"></select>
+    <span style="font-size:11px;color:#bbb">Click Enter/Edit on any row to fill payroll</span>
+  </div>
+  <div id="sumTopTotals"></div>
+  <div class="card">
+    <div style="overflow-x:auto">
+    <table id="sumTable">
+      <thead><tr>
+        <th>Shop</th><th>Emp #</th><th>Name</th><th>Gross</th><th>Cash Adv</th><th>Bank Adv</th><th>Payable</th><th>Bank Pay</th><th>PF</th><th>EMI</th><th>Cash to pay</th><th>Rounded cash</th><th>Status</th><th></th>
+      </tr></thead>
+      <tbody id="sumBody"></tbody>
+      <tfoot id="sumFoot"></tfoot>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- STAFF TAB -->
+<div class="page" id="page-staff">
+  <div class="card">
+    <div class="card-hdr"><span class="card-title">Staff roster</span><button class="btn p" onclick="openM('addStaff')">+ Add staff</button></div>
+    <div style="overflow-x:auto">
+    <table><thead><tr><th>Emp #</th><th>Name</th><th>Shop</th><th>Day rate</th><th>DA</th><th>Increment</th><th>Addl pay</th><th>Status</th><th></th></tr></thead>
+    <tbody id="staffTable"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ADVANCES -->
+<div class="page" id="page-advances">
+  <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+    <button class="btn p" onclick="openM('addAdv')">+ New advance</button>
+  </div>
+  <div id="advList"></div>
+</div>
+
+<!-- MID-MONTH LOG -->
+<div class="page" id="page-midlog">
+  <div style="display:flex;gap:9px;align-items:center;margin-bottom:13px;flex-wrap:wrap">
+    <select id="logMonth" style="padding:7px 11px;font-size:12px;border:1px solid #ddd;border-radius:7px;font-weight:600" onchange="renderMidLog()"></select>
+    <button class="btn p" onclick="openM('addLog')">+ Add entry</button>
+  </div>
+  <div class="card">
+    <div style="overflow-x:auto">
+    <table><thead><tr><th>Date</th><th>Staff</th><th>Type</th><th>Cash (&#8377;)</th><th>Bank (&#8377;)</th><th>Note</th><th></th></tr></thead>
+    <tbody id="midLogBody"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIVITY LOG -->
+<div class="page" id="page-actlog">
+  <div class="card">
+    <div class="card-hdr"><span class="card-title">Activity log</span><button class="btn sm red" onclick="clearActLog()">Clear all</button></div>
+    <div id="actLogList"></div>
+  </div>
+</div>
+
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- ADD STAFF -->
+<div class="overlay" id="ov-addStaff"><div class="modal">
+  <h3>Add staff member</h3>
+  <div class="g2">
+    <div class="fr"><label>Employee number *</label><input id="s-emp" placeholder="e.g. 001"></div>
+    <div class="fr"><label>Full name *</label><input id="s-name" placeholder="Ravi Kumar"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Shop name</label><input id="s-shop" placeholder="e.g. Main Store"></div>
+    <div class="fr"><label>Monthly salary (&#8377;)</label><input id="s-monthly" type="number" placeholder="e.g. 12000" oninput="calcAddDayRate()"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;background:#f7f7f7;border-radius:7px;padding:9px 12px;margin-bottom:10px">
+    <span style="font-size:12px;color:#888">Day salary = Monthly ÷ 34 =</span>
+    <span style="font-size:14px;font-weight:700;color:#111" id="s-day-preview">&#8377;0</span>
+    <span style="font-size:11px;color:#bbb">(editable below)</span>
+  </div>
+  <div class="fr"><label>Day salary (&#8377;) — auto-filled, override if needed</label><input id="s-day" type="number" placeholder="0" oninput="calcAddMonthly()"></div>
+  <div class="divider"></div>
+  <div class="sec-label">Allowances (on by default)</div>
+  <div class="toggle-row"><span style="font-size:12px">DA (<span id="s-da-pct">10</span>% of basic)</span><button class="toggle on" id="s-da" onclick="this.classList.toggle('on')"></button></div>
+  <div class="toggle-row"><span style="font-size:12px">Increment (global rate &times; days worked)</span><button class="toggle on" id="s-incr" onclick="this.classList.toggle('on')"></button></div>
+  <div class="fr" style="margin-top:10px"><label>Increment rate override (&#8377;/day) — blank = use global</label><input id="s-incrOverride" type="number" placeholder="Leave blank for global"></div>
+  <div class="fr"><label>Tiffin rate override (&#8377;/full day) — blank = use global</label><input id="s-tiffin" type="number" placeholder="Leave blank for global"></div>
+  <div class="sec-label">Additional pay</div>
+  <div class="toggle-row"><span style="font-size:12px">Additional pay type</span>
+    <select id="s-addlType" style="font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:6px">
+      <option value="none">None</option>
+      <option value="fixed">Fixed amount per month</option>
+      <option value="rate">Rate &times; days worked</option>
+    </select>
+  </div>
+  <div class="fr"><label>Amount / Rate (&#8377;) — leave blank if none</label><input id="s-addlValue" type="number" placeholder="0"></div>
+  <div class="fr"><label>Status</label><select id="s-status"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+  <div class="mact"><button class="btn" onclick="closeM('addStaff')">Cancel</button><button class="btn p" onclick="saveStaff()">Save staff</button></div>
+</div></div>
+
+<!-- EDIT STAFF -->
+<div class="overlay" id="ov-editStaff"><div class="modal">
+  <h3>Edit staff</h3>
+  <input type="hidden" id="es-id">
+  <div class="g2">
+    <div class="fr"><label>Employee number</label><input id="es-emp"></div>
+    <div class="fr"><label>Full name</label><input id="es-name"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Shop name</label><input id="es-shop"></div>
+    <div class="fr"><label>Monthly salary (&#8377;)</label><input id="es-monthly" type="number" oninput="calcEditDayRate()"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;background:#f7f7f7;border-radius:7px;padding:9px 12px;margin-bottom:10px">
+    <span style="font-size:12px;color:#888">Day salary = Monthly ÷ 34 =</span>
+    <span style="font-size:14px;font-weight:700;color:#111" id="es-day-preview">&#8377;0</span>
+    <span style="font-size:11px;color:#bbb">(editable below)</span>
+  </div>
+  <div class="fr"><label>Day salary (&#8377;) — auto-filled, override if needed</label><input id="es-day" type="number" oninput="calcEditMonthly()"></div>
+  <div style="background:#fef5e4;border:1px solid #f9ca75;border-radius:7px;padding:9px 12px;font-size:11px;color:#7d5a00;margin-bottom:10px">
+    Changing salary only affects future payroll entries. Past entries are preserved as-is.
+  </div>
+  <div class="divider"></div>
+  <div class="toggle-row"><span style="font-size:12px">DA enabled</span><button class="toggle" id="es-da" onclick="this.classList.toggle('on')"></button></div>
+  <div class="toggle-row"><span style="font-size:12px">Increment enabled</span><button class="toggle" id="es-incr" onclick="this.classList.toggle('on')"></button></div>
+  <div class="fr" style="margin-top:10px"><label>Increment rate override (&#8377;/day) — blank = use global</label><input id="es-incrOverride" type="number" placeholder="Blank = global"></div>
+  <div class="fr"><label>Tiffin override (&#8377;/full day) — blank = use global</label><input id="es-tiffin" type="number" placeholder="Blank = global"></div>
+  <div class="sec-label">Additional pay</div>
+  <div class="toggle-row"><span style="font-size:12px">Additional pay type</span>
+    <select id="es-addlType" style="font-size:12px;padding:4px 8px;border:1px solid #ddd;border-radius:6px">
+      <option value="none">None</option>
+      <option value="fixed">Fixed amount per month</option>
+      <option value="rate">Rate &times; days worked</option>
+    </select>
+  </div>
+  <div class="fr"><label>Amount / Rate (&#8377;)</label><input id="es-addlValue" type="number" placeholder="0"></div>
+  <div class="fr"><label>Status</label><select id="es-status"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+  <div class="mact"><button class="btn" onclick="closeM('editStaff')">Cancel</button><button class="btn p" onclick="updateStaff()">Update</button></div>
+</div></div>
+
+<!-- SETTINGS -->
+<div class="overlay" id="ov-settings"><div class="modal">
+  <h3>&#9881; Settings &amp; formulas</h3>
+  <div class="sec-label">Global rates</div>
+  <div class="g3">
+    <div class="fr"><label>DA % (default 10)</label><input id="cfg-da" type="number" placeholder="10"></div>
+    <div class="fr"><label>Increment rate (&#8377;/day)</label><input id="cfg-incr" type="number" placeholder="50"></div>
+    <div class="fr"><label>Tiffin rate (&#8377;/full day)</label><input id="cfg-tiffin" type="number" placeholder="60"></div>
+  </div>
+  <div class="mact"><button class="btn" onclick="closeM('settings')">Cancel</button><button class="btn p" onclick="saveSettings()">Save settings</button></div>
+</div></div>
+
+<!-- ADD ADVANCE -->
+<div class="overlay" id="ov-addAdv"><div class="modal">
+  <h3>New advance / loan</h3>
+  <div class="g2">
+    <div class="fr"><label>Staff member *</label><select id="adv-who"></select></div>
+    <div class="fr"><label>Total advance (&#8377;) *</label><input id="adv-amt" type="number" oninput="calcEMIAuto()" placeholder="25000"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Repayment months *</label><input id="adv-months" type="number" oninput="calcEMIAuto()" placeholder="12"></div>
+    <div class="fr"><label>Monthly EMI (&#8377;) — auto, editable</label><input id="adv-emi" type="number" placeholder="auto"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Given on (date)</label><input id="adv-date" type="date"></div>
+    <div class="fr"><label>EMI deduction starts from</label><select id="adv-startmonth"></select></div>
+  </div>
+  <div class="fr"><label>Note</label><textarea id="adv-note" placeholder="e.g. 4 months salary advance, deduct over 36 months"></textarea></div>
+  <div class="mact"><button class="btn" onclick="closeM('addAdv')">Cancel</button><button class="btn p" onclick="saveAdv()">Save advance</button></div>
+</div></div>
+
+<!-- EDIT ADVANCE -->
+<div class="overlay" id="ov-editAdv"><div class="modal">
+  <h3>Edit advance</h3>
+  <input type="hidden" id="ea-id">
+  <div class="fr"><label>Staff</label><input id="ea-who" readonly style="background:#f5f5f5;color:#888"></div>
+  <div class="g2">
+    <div class="fr"><label>Total advance (&#8377;)</label><input id="ea-amt" type="number" oninput="calcEMIAutoEdit()"></div>
+    <div class="fr"><label>Repayment months</label><input id="ea-months" type="number" oninput="calcEMIAutoEdit()"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Monthly EMI (&#8377;) — auto, editable</label><input id="ea-emi" type="number"></div>
+    <div class="fr"><label>EMI deduction starts from</label><select id="ea-startmonth"></select></div>
+  </div>
+  <div class="fr"><label>Given on (date)</label><input id="ea-date" type="date"></div>
+  <div class="fr"><label>Note</label><textarea id="ea-note"></textarea></div>
+  <div style="background:#fef5e4;border:1px solid #f9ca75;border-radius:7px;padding:9px 12px;font-size:11px;color:#7d5a00;margin-top:4px">
+    Editing does not affect already-recorded EMI payments. Only future calculations are updated.
+  </div>
+  <div class="mact"><button class="btn" onclick="closeM('editAdv')">Cancel</button><button class="btn p" onclick="updateAdv()">Update advance</button></div>
+</div></div>
+
+<!-- MID-MONTH LOG ENTRY -->
+<div class="overlay" id="ov-addLog"><div class="modal">
+  <h3>Mid-month log entry</h3>
+  <div class="g2">
+    <div class="fr"><label>Staff member *</label><select id="lg-who"></select></div>
+    <div class="fr"><label>Date</label><input id="lg-date" type="date"></div>
+  </div>
+  <div class="fr"><label>Type</label>
+    <select id="lg-type">
+      <option value="cash_advance">Cash advance (adjusts next month)</option>
+      <option value="bank_advance">Bank advance (adjusts next month)</option>
+      <option value="expense">Expense / other</option>
+      <option value="note">Note only</option>
+    </select>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Cash amount (&#8377;)</label><input id="lg-cash" type="number" value="0"></div>
+    <div class="fr"><label>Bank amount (&#8377;)</label><input id="lg-bank" type="number" value="0"></div>
+  </div>
+  <div class="fr"><label>Note / description</label><textarea id="lg-note" placeholder="e.g. Emergency cash given on 15th"></textarea></div>
+  <div class="mact"><button class="btn" onclick="closeM('addLog')">Cancel</button><button class="btn p" onclick="saveLogEntry()">Save entry</button></div>
+</div></div>
+
+<!-- PAYROLL ENTRY -->
+<div class="overlay" id="ov-payroll"><div class="modal" style="width:600px">
+  <h3 id="pr-title">Enter payroll</h3>
+  <input type="hidden" id="pr-sid">
+
+  <div class="sec-label">Attendance</div>
+  <div class="g4">
+    <div class="fr"><label>Days in month (auto)</label><input id="pr-mdays" type="number" oninput="calcPayroll()"></div>
+    <div class="fr"><label>Days worked</label><input id="pr-days" type="number" oninput="calcPayroll()" placeholder="0"></div>
+    <div class="fr"><label>Half days</label><input id="pr-half" type="number" value="0" oninput="calcPayroll()"></div>
+    <div class="fr"><label>4-days bonus <small style="color:#bbb;font-size:9px">auto, editable</small></label><input id="pr-4days" type="number" oninput="this.dataset.userEdited='1';calcPayroll()"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Total days (days worked + bonus)</label><input id="pr-totaldays" type="number" readonly style="background:#f0f7ff;font-weight:700"></div>
+    <div class="fr"><label>Full days (auto: days in month − half days)</label><input id="pr-full" type="number" readonly></div>
+  </div>
+
+  <div class="sec-label">Earnings</div>
+  <div class="g3">
+    <div class="fr"><label>Basic (day rate &times; total days)</label><input id="pr-basic" type="number" readonly></div>
+    <div class="fr"><label>DA (<span id="pr-da-pct">10</span>% of basic)</label><input id="pr-da" type="number" readonly></div>
+    <div class="fr"><label>Increment <small style="color:#bbb;font-size:9px">auto, editable</small></label><input id="pr-incr" type="number" oninput="this.dataset.userEdited='1';calcPayroll()"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Additional pay <small id="pr-addl-hint" style="color:#bbb;font-size:9px"></small></label><input id="pr-addl" type="number" value="0" oninput="this.dataset.userEdited='1';calcPayroll()"></div>
+    <div class="fr"><label>Tiffin (rate &times; full days)</label><input id="pr-tiffin" type="number" readonly></div>
+  </div>
+
+  <div class="calc-box">
+    <div class="cr"><span>Basic</span><span id="cb-basic">&#8377;0</span></div>
+    <div class="cr"><span>+ DA</span><span id="cb-da">&#8377;0</span></div>
+    <div class="cr"><span>+ Increment</span><span id="cb-incr">&#8377;0</span></div>
+    <div class="cr"><span>+ Additional pay</span><span id="cb-addl">&#8377;0</span></div>
+    <div class="cr"><span>+ Tiffin</span><span id="cb-tiffin">&#8377;0</span></div>
+    <div class="cr tot"><span>Gross total</span><span id="cb-gross">&#8377;0</span></div>
+  </div>
+
+  <div class="sec-label" style="margin-top:14px">Deductions</div>
+  <div class="g2">
+    <div class="fr"><label>Last month advance (auto from log)</label><input id="pr-lastadv" type="number" readonly></div>
+    <div class="fr"><label>Current month cash advance</label><input id="pr-cadv" type="number" value="0" oninput="calcPayroll()"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Current month bank advance</label><input id="pr-badv" type="number" value="0" oninput="calcPayroll()"></div>
+    <div class="fr"><label>EMI this month (&#8377;) — editable</label><input id="pr-emi" type="number" value="0" oninput="calcPayroll()"></div>
+  </div>
+  <div class="g2">
+    <div class="fr"><label>Bank payment (&#8377;) — salary by bank</label><input id="pr-bank" type="number" value="0" oninput="calcPayroll()"></div>
+    <div class="fr"><label>PF deduction (&#8377;)</label><input id="pr-pf" type="number" value="0" oninput="calcPayroll()"></div>
+  </div>
+  <div class="fr">
+    <label>Previous month negative balance (&#8377;) <small id="pr-prevbal-hint" style="color:#c0392b;font-size:9px"></small></label>
+    <input id="pr-prevbal" type="number" value="0" oninput="calcPayroll()" placeholder="0">
+  </div>
+
+  <div class="calc-box" style="margin-top:8px">
+    <div class="cr"><span>Gross total</span><span id="cd-gross">&#8377;0</span></div>
+    <div class="cr ded"><span>&#8722; Last month advance</span><span id="cd-lastadv">&#8377;0</span></div>
+    <div class="cr ded"><span>&#8722; Cash advance (this month)</span><span id="cd-cadv">&#8377;0</span></div>
+    <div class="cr ded"><span>&#8722; Bank advance (this month)</span><span id="cd-badv">&#8377;0</span></div>
+    <div class="cr tot"><span>Payable</span><span id="cd-payable">&#8377;0</span></div>
+    <div class="cr ded"><span>&#8722; Bank payment</span><span id="cd-bank">&#8377;0</span></div>
+    <div class="cr ded"><span>&#8722; PF</span><span id="cd-pf">&#8377;0</span></div>
+    <div class="cr ded"><span>&#8722; EMI</span><span id="cd-emi">&#8377;0</span></div>
+    <div class="cr ded"><span>&#8722; Prev month balance</span><span id="cd-prevbal">&#8377;0</span></div>
+    <div class="cr net" style="border-top:1px solid #cce0ff;margin-top:6px;padding-top:8px"><span>&#128181; Cash to pay</span><span id="cd-cash">&#8377;0</span></div>
+  </div>
+
+  <div class="g2" style="margin-top:12px">
+    <div class="fr"><label>Status</label><select id="pr-status"><option value="pending">Pending</option><option value="paid">Paid</option><option value="partial">Partial</option></select></div>
+    <div class="fr"><label>Note (optional)</label><input id="pr-note" placeholder=""></div>
+  </div>
+  <div class="mact"><button class="btn" onclick="closeM('payroll')">Cancel</button><button class="btn p" onclick="savePayroll()">Save payroll entry</button></div>
+</div></div>
+
+<script>
+var D={"staff":[{"id":"mn14nftnmjb","empNo":"01","name":"Anil Paswan","shop":"PE","dayRate":370,"da":true,"incr":true,"tiffinOverride":null,"status":"active","monthlySalary":12580},{"id":"mn14s6eimvy","empNo":"02","name":"Parmanand Paswan","shop":"PE","dayRate":410,"da":true,"incr":true,"tiffinOverride":null,"status":"active","monthlySalary":13940},{"id":"mn14ssh0iax","empNo":"03","name":"Deepak Saw","shop":"PE","dayRate":650,"da":true,"incr":true,"tiffinOverride":null,"status":"active","monthlySalary":22100},{"id":"mn14tb9dx53","empNo":"47","name":"Uttam Singh","shop":"PE","dayRate":225,"da":true,"incr":true,"tiffinOverride":null,"status":"active","monthlySalary":7650},{"id":"mn15o8g6snh","empNo":"07","name":"Binod Kr. Rawani","shop":"PE","dayRate":262,"da":true,"incr":true,"tiffinOverride":null,"status":"active","monthlySalary":8908},{"id":"mn15oz74k7x","empNo":"08","name":"Vicky Rajak","shop":"PE","dayRate":200,"da":true,"incr":true,"tiffinOverride":null,"status":"active","monthlySalary":6800},{"id":"mn15ql3t3u1","empNo":"82","name":"Chanchal Da","shop":"PE","dayRate":245,"da":true,"incr":true,"tiffinOverride":0,"status":"active","monthlySalary":8330,"incrOverride":null,"addlType":"rate","addlValue":100},{"id":"mn15s8bbiuv","empNo":"70","name":"Diwakar Sarkar","shop":"PE","dayRate":285,"da":true,"incr":true,"tiffinOverride":0,"status":"active","monthlySalary":9690},{"id":"mn16kn6qtu1","empNo":"16","name":"Sanjay Gupta","shop":"A1","dayRate":282,"monthlySalary":9588,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn18i38ywi5","empNo":"17","name":"Harish Verma","shop":"A1","dayRate":400,"monthlySalary":13600,"da":true,"incr":true,"tiffinOverride":100,"status":"active","incrOverride":null,"addlType":"fixed","addlValue":3000},{"id":"mn19ps9ubws","empNo":"18","name":"Ajay Keshri","shop":"A1","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1l7u83buz","empNo":"19","name":"Ajay Sharma","shop":"A1","dayRate":235,"monthlySalary":7990,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1l93zcqho","empNo":"21","name":"Chhotan Das","shop":"A2","dayRate":300,"monthlySalary":10200,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1laozasag","empNo":"24","name":"Krishna Rakshit","shop":"A2","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1lbvmi8nd","empNo":"27","name":"Suraj Saw","shop":"A2","dayRate":225,"monthlySalary":7650,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1lcqn730m","empNo":"28","name":"Biru Bharti","shop":"A2","dayRate":180,"monthlySalary":6120,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1ldz6gn2k","empNo":"29","name":"Pappu Paswan","shop":"A2","dayRate":340,"monthlySalary":11560,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1lfs2ok4x","empNo":"25","name":"Dhiren Verma","shop":"A2","dayRate":350,"monthlySalary":11900,"da":false,"incr":true,"tiffinOverride":null,"status":"active","incrOverride":50,"addlType":"none","addlValue":0},{"id":"mn1lhdtlv87","empNo":"34","name":"Sunil Kumar","shop":"A3","dayRate":300,"monthlySalary":10200,"da":false,"incr":false,"tiffinOverride":null,"status":"active"},{"id":"mn1lib1p1mg","empNo":"37","name":"Bansidhar Gope","shop":"A3","dayRate":255,"monthlySalary":8670,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1vjgrk82c","empNo":"38","name":"Manoj Kumar Sinha","shop":"A3","dayRate":240,"monthlySalary":8160,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1vkdra1fz","empNo":"39","name":"Vikram","shop":"A3","dayRate":275,"monthlySalary":9350,"da":false,"incr":false,"tiffinOverride":null,"status":"active"},{"id":"mn1vlqdqkb6","empNo":"44","name":"Md Samim Ansari","shop":"A3","dayRate":220,"monthlySalary":7480,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1vmd7zf3x","empNo":"04","name":"Amarnath Thakur","shop":"A3","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn1vn2xgqwn","empNo":"45","name":"Pintu Saw","shop":"A5","dayRate":410,"monthlySalary":13940,"da":true,"incr":true,"tiffinOverride":100,"status":"active","incrOverride":null,"addlType":"fixed","addlValue":2000},{"id":"mn1vzp3nyn0","empNo":"46","name":"Jitu Pasi","shop":"A5","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"tiffinOverride":null,"status":"active"},{"id":"mn24mken1eb","empNo":"50","name":"Jitendra Keshri","shop":"A5","dayRate":250,"monthlySalary":8500,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn24nsh8zz7","empNo":"51","name":"Prakash Keshri","shop":"A5","dayRate":300,"monthlySalary":10200,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn24p6c6vgq","empNo":"53","name":"Subham Raut","shop":"A5","dayRate":150,"monthlySalary":5100,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn24q5ue3a1","empNo":"54","name":"Vicky Singh","shop":"A5","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn24t49xg7q","empNo":"55","name":"Raushan Verma","shop":"A5","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn24u3jbjaf","empNo":"57","name":"Sanjay Raut","shop":"A5","dayRate":225,"monthlySalary":7650,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn24wfeabi9","empNo":"61","name":"Nawal Pd. Sinha","shop":"A6","dayRate":335,"monthlySalary":11390,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":100,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn24xq2fovm","empNo":"62","name":"Umesh Raut","shop":"A6","dayRate":300,"monthlySalary":10200,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn250atw3x3","empNo":"64","name":"Jitendra Gupta","shop":"A6","dayRate":270,"monthlySalary":9180,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn256gbug8d","empNo":"65","name":"Manu Rawani","shop":"A6","dayRate":250,"monthlySalary":8500,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25ale6met","empNo":"69","name":"Pawan Agarwal","shop":"A6","dayRate":300,"monthlySalary":10200,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25cl53lgq","empNo":"-","name":"Rahul Kr. Das","shop":"A6","dayRate":300,"monthlySalary":10200,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25fl1e8tv","empNo":"71","name":"Sanjay Dangaich","shop":"A7","dayRate":310,"monthlySalary":10540,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":100,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25ie048f0","empNo":"72","name":"Santosh Rawani","shop":"A7","dayRate":275,"monthlySalary":9350,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25k1ntebn","empNo":"73","name":"Pramod Keshri","shop":"A7","dayRate":400,"monthlySalary":13600,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":100,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25li7hw8c","empNo":"75","name":"Ranjeet Rawani","shop":"A7","dayRate":300,"monthlySalary":10200,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":90,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25oaevpg8","empNo":"81","name":"Sumit Bhadani","shop":"A7","dayRate":180,"monthlySalary":6120,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25q07ytpr","empNo":"-","name":"Sunny Gupta","shop":"A7","dayRate":225,"monthlySalary":7650,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":null,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25st9h24p","empNo":"GP-1","name":"Saurabh Mathur","shop":"GP","dayRate":225,"monthlySalary":7650,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"rate","addlValue":125,"status":"active"},{"id":"mn25ugopvlw","empNo":"GP-2","name":"Vicky Verma","shop":"GP","dayRate":345,"monthlySalary":11730,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25xdi0n17","empNo":"GP-4","name":"Uma Shankar Gupta","shop":"GP","dayRate":275,"monthlySalary":9350,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn25ycbp3dn","empNo":"GP-5","name":"Ronit Srivastav (Golu)","shop":"GP","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn260bvlh7r","empNo":"GP-6","name":"Praveen Rawani","shop":"GP","dayRate":425,"monthlySalary":14450,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn262kerr5e","empNo":"GP-7","name":"Kartik Modak","shop":"GP","dayRate":400,"monthlySalary":13600,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn267gev4u0","empNo":"GP-8","name":"Dhiraj Saw","shop":"GP","dayRate":275,"monthlySalary":9350,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"rate","addlValue":150,"status":"active"},{"id":"mn2matxnfh3","empNo":"GP-9","name":"Manish Chaudhary","shop":"GP","dayRate":300,"monthlySalary":10200,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2mc63ewgu","empNo":"GP-10","name":"Sagar Rawani","shop":"GP","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2mdwwgohn","empNo":"GP-11","name":"Sangam Keshri","shop":"GP","dayRate":200,"monthlySalary":6800,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2mfezr37q","empNo":"GP-12","name":"Rinku Bauri","shop":"GP","dayRate":250,"monthlySalary":8500,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2mgt9n6zw","empNo":"GP-15","name":"Abhinandan Paswan","shop":"GP","dayRate":175,"monthlySalary":5950,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2mk369vxo","empNo":"SD-1","name":"Anand Sinha","shop":"SD","dayRate":200,"monthlySalary":6800,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2mlz55zjm","empNo":"SD-2","name":"Ravi Pandit","shop":"SD","dayRate":400,"monthlySalary":13600,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2mnxtfuwt","empNo":"SD-4","name":"Pappu Rawani","shop":"SD","dayRate":350,"monthlySalary":11900,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2mqoo8muj","empNo":"SD-5","name":"Suraj Soni","shop":"SD","dayRate":275,"monthlySalary":9350,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"rate","addlValue":50,"status":"active"},{"id":"mn2mt5g61si","empNo":"SD-6","name":"Subhash Keshri","shop":"SD","dayRate":275,"monthlySalary":9350,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2muwh79kt","empNo":"SD-10","name":"Dilip Khandelwal","shop":"SD","dayRate":315,"monthlySalary":10710,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"fixed","addlValue":2000,"status":"active"},{"id":"mn2mxbhwhcl","empNo":"SD-11","name":"Vikhan Ch. Dey","shop":"SD","dayRate":300,"monthlySalary":10200,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2myt2vjth","empNo":"SD-13","name":"Rajesh Bhadani","shop":"SD","dayRate":300,"monthlySalary":10200,"da":true,"incr":true,"incrOverride":105,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2n15zzz3v","empNo":"SD-14","name":"Vicky Singh","shop":"SD","dayRate":450,"monthlySalary":15300,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2n3916fwi","empNo":"SD-16","name":"Haradhan Modak","shop":"SD","dayRate":235,"monthlySalary":7990,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2n4min1i5","empNo":"SD-21","name":"Md. Guddu Ansari","shop":"SD","dayRate":400,"monthlySalary":13600,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2n6bsrzvi","empNo":"SD-22","name":"Mahesh Modak","shop":"SD","dayRate":315,"monthlySalary":10710,"da":true,"incr":true,"incrOverride":100,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2n9zhwif8","empNo":"SD-23","name":"Md. Raja Khan","shop":"SD","dayRate":400,"monthlySalary":13600,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2nb30k7xp","empNo":"SD-24","name":"Mamta Devi","shop":"SD","dayRate":275,"monthlySalary":9350,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2nck2b0gy","empNo":"SD-27","name":"Kamlesh Tiwari","shop":"SD","dayRate":400,"monthlySalary":13600,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"rate","addlValue":50,"status":"active"},{"id":"mn2ndsqmb7p","empNo":"SD-28","name":"Renu Yadav","shop":"SD","dayRate":250,"monthlySalary":8500,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2r6vj02vx","empNo":"WH-1","name":"Anup Pandit","shop":"WH","dayRate":500,"monthlySalary":17000,"da":true,"incr":true,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2r7ppxgxp","empNo":"WH-3","name":"Pradip Verma","shop":"WH","dayRate":425,"monthlySalary":14450,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2r93birva","empNo":"WH-6","name":"Raju Kr Saw","shop":"WH","dayRate":220,"monthlySalary":7480,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"rate","addlValue":50,"status":"active"},{"id":"mn2rlim5wxo","empNo":"WH-14","name":"Suresh Saw","shop":"WH","dayRate":225,"monthlySalary":7650,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2rny1dbpu","empNo":"WH-15","name":"Ganga Swarnkar","shop":"WH","dayRate":400,"monthlySalary":13600,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2rram9rz0","empNo":"WH-19","name":"Ravinder Jee (Guard)","shop":"WH","dayRate":220,"monthlySalary":7480,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":0,"addlType":"fixed","addlValue":1000,"status":"active"},{"id":"mn2rsviergy","empNo":"WH-20","name":"Vikash Gupta","shop":"WH","dayRate":1000,"monthlySalary":34000,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2ru03wznw","empNo":"WH-21","name":"Shrikant Pal","shop":"WH","dayRate":175,"monthlySalary":5950,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"rate","addlValue":50,"status":"active"},{"id":"mn2ruxfmfaz","empNo":"WH-24","name":"Dilip Pathak","shop":"WH","dayRate":0,"monthlySalary":0,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":0,"addlType":"fixed","addlValue":11000,"status":"active"},{"id":"mn2ry2g0hyx","empNo":"WH-25","name":"Doman Rajwar","shop":"WH","dayRate":320,"monthlySalary":10880,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":0,"addlType":"fixed","addlValue":1600,"status":"active"},{"id":"mn2rz6d7ng7","empNo":"WH-28","name":"Kishan Khandelwal","shop":"WH","dayRate":275,"monthlySalary":9350,"da":false,"incr":true,"incrOverride":50,"tiffinOverride":0,"addlType":"none","addlValue":0,"status":"active"},{"id":"mn2s0gqgk8j","empNo":"WH-83","name":"AlakhDeo Prasad","shop":"WH","dayRate":0,"monthlySalary":0,"da":false,"incr":false,"incrOverride":null,"tiffinOverride":0,"addlType":"fixed","addlValue":15000,"status":"active"}],"advances":[{"id":"mn1wo4r3xyv","staffId":"mn1l7u83buz","amount":10000,"totalMonths":8,"emi":1250,"givenOn":"2025-10-01","startMonth":"Jul 2025","note":"","paidEMIs":1,"closed":false,"payments":[{"month":"Mar 2026","amt":7500,"t":"22 Mar, 08:52 pm"}]},{"id":"mn24cex5spi","staffId":"mn1lhdtlv87","amount":10000,"totalMonths":3,"emi":3334,"givenOn":"2026-01-15","startMonth":"Feb 2026","note":"","paidEMIs":0,"closed":false,"payments":[]},{"id":"mn24lrvuws8","staffId":"mn1vzp3nyn0","amount":9500,"totalMonths":7,"emi":1500,"givenOn":"2026-01-15","startMonth":"Feb 2026","note":"","paidEMIs":0,"closed":false,"payments":[]}],"payroll":[{"id":"mn153s5w83m","staffId":"mn14nftnmjb","month":"Mar 2026","daysWorked":0,"halfDays":0,"fullDays":31,"fourDays":0,"basic":0,"da":0,"incr":0,"addlPay":0,"tiffin":2170,"gross":2170,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":2170,"bankPay":0,"pf":0,"emi":0,"cashToPay":2170,"status":"pending","note":"","saved":"22 Mar, 08:00 am","fourDaysBonus":0,"totalDays":0},{"id":"mn1wbsh4egw","staffId":"mn14nftnmjb","month":"Jan 2026","daysWorked":26.5,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30.5,"basic":11285,"da":1129,"incr":1458,"addlPay":0,"tiffin":1820,"gross":15692,"lastAdv":0,"cashAdv":10000,"bankAdv":0,"payable":5692,"bankPay":0,"pf":0,"emi":0,"cashToPay":5692,"status":"pending","note":"","saved":"22 Mar, 08:42 pm"},{"id":"mn1wbwd1h67","staffId":"mn14s6eimvy","month":"Jan 2026","daysWorked":21,"halfDays":10,"fullDays":21,"fourDaysBonus":3,"totalDays":24,"basic":9840,"da":984,"incr":1155,"addlPay":0,"tiffin":1470,"gross":13449,"lastAdv":0,"cashAdv":1000,"bankAdv":5000,"payable":7449,"bankPay":5744,"pf":1279,"emi":0,"cashToPay":426,"status":"pending","note":"","saved":"22 Mar, 08:42 pm"},{"id":"mn1wc0ambyj","staffId":"mn14ssh0iax","month":"Jan 2026","daysWorked":30,"halfDays":1,"fullDays":30,"fourDaysBonus":4,"totalDays":34,"basic":22100,"da":2210,"incr":1650,"addlPay":0,"tiffin":2100,"gross":28060,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":23060,"bankPay":0,"pf":0,"emi":0,"cashToPay":23060,"status":"pending","note":"","saved":"22 Mar, 08:42 pm"},{"id":"mn1wdg8f21u","staffId":"mn14tb9dx53","month":"Jan 2026","daysWorked":26.5,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30.5,"basic":6863,"da":686,"incr":1458,"addlPay":0,"tiffin":1820,"gross":10827,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":3827,"bankPay":0,"pf":0,"emi":0,"cashToPay":3827,"status":"pending","note":"","saved":"22 Mar, 08:44 pm"},{"id":"mn1wd4hces6","staffId":"mn15o8g6snh","month":"Jan 2026","daysWorked":25,"halfDays":6,"fullDays":25,"fourDaysBonus":4,"totalDays":29,"basic":7598,"da":760,"incr":1375,"addlPay":0,"tiffin":1750,"gross":11483,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":5483,"bankPay":0,"pf":0,"emi":0,"cashToPay":5483,"status":"pending","note":"","saved":"22 Mar, 08:43 pm"},{"id":"mn1wda54g7n","staffId":"mn15oz74k7x","month":"Jan 2026","daysWorked":27,"halfDays":4,"fullDays":27,"fourDaysBonus":4,"totalDays":31,"basic":6200,"da":620,"incr":1485,"addlPay":0,"tiffin":1890,"gross":10195,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":5195,"bankPay":0,"pf":0,"emi":0,"cashToPay":5195,"status":"pending","note":"","saved":"22 Mar, 08:43 pm"},{"id":"mn1wfucpohd","staffId":"mn15ql3t3u1","month":"Jan 2026","daysWorked":31,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":35,"basic":8575,"da":858,"incr":1705,"addlPay":3100,"tiffin":0,"gross":14238,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":14238,"bankPay":12159,"pf":1705,"emi":0,"cashToPay":374,"status":"pending","note":"","saved":"22 Mar, 08:45 pm"},{"id":"mn1wdl85d8u","staffId":"mn15s8bbiuv","month":"Jan 2026","daysWorked":19.5,"halfDays":12,"fullDays":19,"fourDaysBonus":3,"totalDays":22.5,"basic":6413,"da":641,"incr":1073,"addlPay":0,"tiffin":0,"gross":8127,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":8127,"bankPay":7309,"pf":776,"emi":0,"cashToPay":42,"status":"pending","note":"","saved":"22 Mar, 08:44 pm"},{"id":"mn1wg1ajcy2","staffId":"mn16kn6qtu1","month":"Jan 2026","daysWorked":15,"halfDays":16,"fullDays":15,"fourDaysBonus":3,"totalDays":18,"basic":5076,"da":508,"incr":825,"addlPay":0,"tiffin":1050,"gross":7459,"lastAdv":0,"cashAdv":0,"bankAdv":7000,"payable":459,"bankPay":0,"pf":0,"emi":0,"cashToPay":459,"status":"pending","note":"","saved":"22 Mar, 08:46 pm"},{"id":"mn1wcqt33zo","staffId":"mn15o8g6snh","month":"Mar 2026","daysWorked":0,"halfDays":0,"fullDays":31,"fourDaysBonus":0,"totalDays":0,"basic":0,"da":0,"incr":1375,"addlPay":0,"tiffin":2170,"gross":3545,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":3545,"bankPay":0,"pf":0,"emi":0,"cashToPay":3545,"status":"pending","note":"","saved":"22 Mar, 08:43 pm"},{"id":"mn1wk5fbl33","staffId":"mn18i38ywi5","month":"Jan 2026","daysWorked":29.5,"halfDays":2,"fullDays":29,"fourDaysBonus":6,"totalDays":35.5,"basic":14200,"da":1420,"incr":1623,"addlPay":3000,"tiffin":2900,"gross":23143,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":17143,"bankPay":13659,"pf":1705,"emi":0,"cashToPay":1779,"status":"pending","note":"","saved":"22 Mar, 08:49 pm"},{"id":"mn1wkrdwk5w","staffId":"mn19ps9ubws","month":"Jan 2026","daysWorked":26,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30,"basic":6000,"da":600,"incr":1430,"addlPay":0,"tiffin":1820,"gross":9850,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":3850,"bankPay":0,"pf":0,"emi":0,"cashToPay":3850,"status":"pending","note":"","saved":"22 Mar, 08:49 pm"},{"id":"mn1wml0xp1h","staffId":"mn1l7u83buz","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":7755,"da":776,"incr":1595,"addlPay":0,"tiffin":2030,"gross":12156,"lastAdv":0,"cashAdv":0,"bankAdv":5000,"payable":7156,"bankPay":4579,"pf":1035,"emi":1250,"cashToPay":292,"status":"pending","note":"","saved":"22 Mar, 08:51 pm"},{"id":"mn1wrq7tjpy","staffId":"mn1l93zcqho","month":"Jan 2026","daysWorked":25,"halfDays":6,"fullDays":25,"fourDaysBonus":4,"totalDays":29,"basic":8700,"da":870,"incr":1375,"addlPay":0,"tiffin":1750,"gross":12695,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":7695,"bankPay":6751,"pf":841,"emi":0,"cashToPay":103,"status":"pending","note":"","saved":"22 Mar, 08:55 pm"},{"id":"mn243slqa1b","staffId":"mn1lfs2ok4x","month":"Jan 2026","daysWorked":26,"halfDays":6,"fullDays":25,"fourDaysBonus":4,"totalDays":30,"basic":10500,"da":0,"incr":1300,"addlPay":0,"tiffin":1750,"gross":13550,"lastAdv":0,"cashAdv":9000,"bankAdv":0,"payable":4550,"bankPay":0,"pf":0,"emi":0,"cashToPay":4550,"status":"pending","note":"","saved":"23 Mar, 12:20 am"},{"id":"mn244fjspbu","staffId":"mn1lbvmi8nd","month":"Jan 2026","daysWorked":21,"halfDays":10,"fullDays":21,"fourDaysBonus":3,"totalDays":24,"basic":5400,"da":540,"incr":1155,"addlPay":0,"tiffin":1470,"gross":8565,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":565,"bankPay":0,"pf":0,"emi":0,"cashToPay":565,"status":"pending","note":"","saved":"23 Mar, 12:21 am"},{"id":"mn244ycm324","staffId":"mn1lcqn730m","month":"Jan 2026","daysWorked":21,"halfDays":10,"fullDays":21,"fourDaysBonus":3,"totalDays":24,"basic":4320,"da":432,"incr":1155,"addlPay":0,"tiffin":1470,"gross":7377,"lastAdv":0,"cashAdv":3500,"bankAdv":0,"payable":3877,"bankPay":0,"pf":0,"emi":0,"cashToPay":3877,"status":"pending","note":"","saved":"23 Mar, 12:21 am"},{"id":"mn245jev6p9","staffId":"mn1ldz6gn2k","month":"Jan 2026","daysWorked":26,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30,"basic":10200,"da":1020,"incr":1430,"addlPay":0,"tiffin":1820,"gross":14470,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":6470,"bankPay":0,"pf":0,"emi":0,"cashToPay":6470,"status":"pending","note":"","saved":"23 Mar, 12:21 am"},{"id":"mn24770pops","staffId":"mn1lhdtlv87","month":"Jan 2026","daysWorked":25,"halfDays":6,"fullDays":25,"fourDaysBonus":4,"totalDays":29,"basic":8700,"da":0,"incr":0,"addlPay":0,"tiffin":1750,"gross":10450,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":3450,"bankPay":0,"pf":0,"emi":0,"cashToPay":3450,"status":"pending","note":"","saved":"23 Mar, 12:23 am"},{"id":"mn2498t8x7s","staffId":"mn1lib1p1mg","month":"Jan 2026","daysWorked":26,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30,"basic":7650,"da":765,"incr":1430,"addlPay":0,"tiffin":1820,"gross":11665,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":11665,"bankPay":0,"pf":0,"emi":0,"cashToPay":11665,"status":"pending","note":"","saved":"23 Mar, 12:24 am"},{"id":"mn249thp5jc","staffId":"mn1vjgrk82c","month":"Jan 2026","daysWorked":27.5,"halfDays":4,"fullDays":27,"fourDaysBonus":4,"totalDays":31.5,"basic":7560,"da":756,"incr":1513,"addlPay":0,"tiffin":1890,"gross":11719,"lastAdv":0,"cashAdv":1000,"bankAdv":0,"payable":10719,"bankPay":8636,"pf":971,"emi":0,"cashToPay":1112,"status":"pending","note":"","saved":"23 Mar, 12:25 am"},{"id":"mn24awayuto","staffId":"mn1vkdra1fz","month":"Jan 2026","daysWorked":29,"halfDays":3,"fullDays":28,"fourDaysBonus":4,"totalDays":33,"basic":9075,"da":0,"incr":0,"addlPay":0,"tiffin":1960,"gross":11035,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":6035,"bankPay":0,"pf":0,"emi":0,"cashToPay":6035,"status":"pending","note":"","saved":"23 Mar, 12:26 am"},{"id":"mn24gp60cw6","staffId":"mn1vlqdqkb6","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":7260,"da":726,"incr":1595,"addlPay":0,"tiffin":2030,"gross":11611,"lastAdv":0,"cashAdv":3000,"bankAdv":0,"payable":8611,"bankPay":7751,"pf":841,"emi":0,"cashToPay":19,"status":"pending","note":"","saved":"23 Mar, 12:30 am"},{"id":"mn24vl1ahkn","staffId":"mn1vmd7zf3x","month":"Jan 2026","daysWorked":25.5,"halfDays":6,"fullDays":25,"fourDaysBonus":4,"totalDays":29.5,"basic":5900,"da":590,"incr":1403,"addlPay":0,"tiffin":1750,"gross":9643,"lastAdv":0,"cashAdv":3000,"bankAdv":0,"payable":6643,"bankPay":0,"pf":0,"emi":0,"cashToPay":6643,"status":"pending","note":"","saved":"23 Mar, 12:42 am"},{"id":"mn24jatbalp","staffId":"mn1vn2xgqwn","month":"Jan 2026","daysWorked":26,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30,"basic":12300,"da":1230,"incr":1430,"addlPay":2000,"tiffin":2600,"gross":19560,"lastAdv":0,"cashAdv":7500,"bankAdv":0,"payable":12060,"bankPay":8136,"pf":971,"emi":3194,"cashToPay":-241,"status":"pending","note":"","saved":"23 Mar, 12:32 am"},{"id":"mn24rl1hng5","staffId":"mn1vzp3nyn0","month":"Jan 2026","daysWorked":26.5,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30.5,"basic":6100,"da":610,"incr":1458,"addlPay":0,"tiffin":1820,"gross":9988,"lastAdv":0,"cashAdv":9500,"bankAdv":0,"payable":488,"bankPay":0,"pf":0,"emi":0,"cashToPay":488,"status":"pending","note":"Doubt in Advance - Impart deducted + Advance written for EMI","saved":"23 Mar, 12:39 am"},{"id":"mn24n57csp7","staffId":"mn24mken1eb","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":8250,"da":825,"incr":1595,"addlPay":0,"tiffin":2030,"gross":12700,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":12700,"bankPay":8996,"pf":1023,"emi":0,"cashToPay":2681,"status":"pending","note":"","saved":"23 Mar, 12:35 am"},{"id":"mn24ob1lhms","staffId":"mn24nsh8zz7","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":9900,"da":990,"incr":1595,"addlPay":0,"tiffin":2030,"gross":14515,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":9515,"bankPay":0,"pf":0,"emi":0,"cashToPay":9515,"status":"pending","note":"","saved":"23 Mar, 12:36 am"},{"id":"mn24pgqagi0","staffId":"mn24p6c6vgq","month":"Jan 2026","daysWorked":26,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30,"basic":4500,"da":450,"incr":1430,"addlPay":0,"tiffin":1820,"gross":8200,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":8200,"bankPay":0,"pf":0,"emi":0,"cashToPay":8200,"status":"pending","note":"","saved":"23 Mar, 12:37 am"},{"id":"mn24qpyio1y","staffId":"mn24q5ue3a1","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":6600,"da":660,"incr":1595,"addlPay":0,"tiffin":2030,"gross":10885,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":2885,"bankPay":0,"pf":0,"emi":0,"cashToPay":2885,"status":"pending","note":"","saved":"23 Mar, 12:38 am"},{"id":"mn24te26y1c","staffId":"mn24t49xg7q","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":6600,"da":660,"incr":1595,"addlPay":0,"tiffin":2030,"gross":10885,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":10885,"bankPay":0,"pf":0,"emi":0,"cashToPay":10885,"status":"pending","note":"","saved":"23 Mar, 12:40 am"},{"id":"mn24v280306","staffId":"mn24u3jbjaf","month":"Jan 2026","daysWorked":30,"halfDays":1,"fullDays":30,"fourDaysBonus":4,"totalDays":34,"basic":7650,"da":765,"incr":1650,"addlPay":0,"tiffin":2100,"gross":12165,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":12165,"bankPay":7751,"pf":841,"emi":1083,"cashToPay":2490,"status":"pending","note":"","saved":"23 Mar, 12:41 am"},{"id":"mn24wxhzvxc","staffId":"mn24wfeabi9","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":11055,"da":1106,"incr":1595,"addlPay":0,"tiffin":2900,"gross":16656,"lastAdv":0,"cashAdv":0,"bankAdv":10000,"payable":6656,"bankPay":4636,"pf":971,"emi":0,"cashToPay":1049,"status":"pending","note":"","saved":"23 Mar, 12:43 am"},{"id":"mn24yherkyg","staffId":"mn24xq2fovm","month":"Jan 2026","daysWorked":27.5,"halfDays":4,"fullDays":27,"fourDaysBonus":4,"totalDays":31.5,"basic":9450,"da":945,"incr":1513,"addlPay":0,"tiffin":1890,"gross":13798,"lastAdv":0,"cashAdv":1000,"bankAdv":6000,"payable":6798,"bankPay":5661,"pf":1194,"emi":0,"cashToPay":-57,"status":"pending","note":"","saved":"23 Mar, 12:44 am"},{"id":"mn250wr7sgx","staffId":"mn250atw3x3","month":"Jan 2026","daysWorked":29,"halfDays":3,"fullDays":28,"fourDaysBonus":4,"totalDays":33,"basic":8910,"da":891,"incr":1595,"addlPay":0,"tiffin":1960,"gross":13356,"lastAdv":0,"cashAdv":6000,"bankAdv":7000,"payable":356,"bankPay":0,"pf":1364,"emi":0,"cashToPay":-1008,"status":"pending","note":"","saved":"23 Mar, 12:46 am"},{"id":"mn259qon78h","staffId":"mn256gbug8d","month":"Jan 2026","daysWorked":25,"halfDays":6,"fullDays":25,"fourDaysBonus":4,"totalDays":29,"basic":7250,"da":0,"incr":0,"addlPay":0,"tiffin":1750,"gross":9000,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":3000,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3000,"status":"pending","note":"","saved":"23 Mar, 12:53 am"},{"id":"mn25b1u2uow","staffId":"mn25ale6met","month":"Jan 2026","daysWorked":30,"halfDays":1,"fullDays":30,"fourDaysBonus":4,"totalDays":34,"basic":10200,"da":0,"incr":1500,"addlPay":0,"tiffin":2100,"gross":13800,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":13800,"bankPay":8636,"pf":971,"emi":0,"prevBal":0,"cashToPay":4193,"status":"pending","note":"","saved":"23 Mar, 12:54 am"},{"id":"mn25cvcobm1","staffId":"mn25cl53lgq","month":"Jan 2026","daysWorked":30,"halfDays":1,"fullDays":30,"fourDaysBonus":4,"totalDays":34,"basic":10200,"da":0,"incr":0,"addlPay":0,"tiffin":2100,"gross":12300,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":12300,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":12300,"status":"pending","note":"","saved":"23 Mar, 12:55 am"},{"id":"mn25hnr8s57","staffId":"mn25fl1e8tv","month":"Jan 2026","daysWorked":30,"halfDays":1,"fullDays":30,"fourDaysBonus":4,"totalDays":34,"basic":10540,"da":1054,"incr":1650,"addlPay":0,"tiffin":3000,"gross":16244,"lastAdv":0,"cashAdv":5000,"bankAdv":10000,"payable":1244,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":1244,"status":"pending","note":"","saved":"23 Mar, 12:59 am"},{"id":"mn25j0me1wk","staffId":"mn25ie048f0","month":"Jan 2026","daysWorked":26,"halfDays":5,"fullDays":26,"fourDaysBonus":4,"totalDays":30,"basic":8250,"da":825,"incr":1430,"addlPay":0,"tiffin":1820,"gross":12325,"lastAdv":0,"cashAdv":0,"bankAdv":5000,"payable":7325,"bankPay":5161,"pf":1194,"emi":1000,"prevBal":0,"cashToPay":-30,"status":"pending","note":"","saved":"23 Mar, 01:00 am"},{"id":"mn25kn7r9xc","staffId":"mn25k1ntebn","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":13200,"da":1320,"incr":1595,"addlPay":0,"tiffin":2900,"gross":19015,"lastAdv":0,"cashAdv":10000,"bankAdv":0,"payable":9015,"bankPay":9000,"pf":0,"emi":0,"prevBal":0,"cashToPay":15,"status":"pending","note":"","saved":"23 Mar, 01:01 am"},{"id":"mn25n7oyjrg","staffId":"mn25li7hw8c","month":"Jan 2026","daysWorked":14,"halfDays":17,"fullDays":14,"fourDaysBonus":2,"totalDays":16,"basic":4800,"da":0,"incr":0,"addlPay":0,"tiffin":1260,"gross":6060,"lastAdv":0,"cashAdv":3000,"bankAdv":0,"payable":3060,"bankPay":0,"pf":0,"emi":2000,"prevBal":0,"cashToPay":1060,"status":"pending","note":"Wrong EMI felt - as EMI ended in November","saved":"23 Mar, 01:03 am"},{"id":"mn25owecpr3","staffId":"mn25oaevpg8","month":"Jan 2026","daysWorked":29,"halfDays":2,"fullDays":29,"fourDaysBonus":4,"totalDays":33,"basic":5940,"da":594,"incr":1595,"addlPay":0,"tiffin":2030,"gross":10159,"lastAdv":0,"cashAdv":3000,"bankAdv":0,"payable":7159,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":7159,"status":"pending","note":"","saved":"23 Mar, 01:04 am"},{"id":"mn25r5rrq45","staffId":"mn25q07ytpr","month":"Jan 2026","daysWorked":25.5,"halfDays":6,"fullDays":25,"fourDaysBonus":4,"totalDays":29.5,"basic":6638,"da":0,"incr":0,"addlPay":0,"tiffin":1750,"gross":8388,"lastAdv":0,"cashAdv":15000,"bankAdv":0,"payable":-6612,"bankPay":0,"pf":0,"emi":0,"prevBal":1020,"cashToPay":-7632,"status":"pending","note":"","saved":"23 Mar, 01:06 am"},{"id":"mn25t9uqxz1","staffId":"mn25st9h24p","month":"Jan 2026","daysWorked":23,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":27,"basic":6075,"da":608,"incr":1265,"addlPay":2875,"tiffin":0,"gross":10823,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":10823,"bankPay":9411,"pf":1449,"emi":0,"prevBal":0,"cashToPay":-37,"status":"pending","note":"","saved":"23 Mar, 01:08 am"},{"id":"mn25wb37jm1","staffId":"mn25ugopvlw","month":"Jan 2026","daysWorked":24,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":28,"basic":9660,"da":966,"incr":1320,"addlPay":0,"tiffin":0,"gross":11946,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":3946,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3946,"status":"pending","note":"","saved":"23 Mar, 01:10 am"},{"id":"mn25xmyrbgq","staffId":"mn25xdi0n17","month":"Jan 2026","daysWorked":18,"halfDays":0,"fullDays":31,"fourDaysBonus":3,"totalDays":21,"basic":5775,"da":578,"incr":990,"addlPay":0,"tiffin":0,"gross":7343,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":7343,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":7343,"status":"pending","note":"","saved":"23 Mar, 01:11 am"},{"id":"mn25zde0kme","staffId":"mn25ycbp3dn","month":"Jan 2026","daysWorked":25,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":29,"basic":5800,"da":580,"incr":1375,"addlPay":0,"tiffin":0,"gross":7755,"lastAdv":0,"cashAdv":10000,"bankAdv":0,"payable":-2245,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":-2245,"status":"pending","note":"","saved":"23 Mar, 01:13 am"},{"id":"mn2611k3abp","staffId":"mn260bvlh7r","month":"Jan 2026","daysWorked":27,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":31,"basic":13175,"da":1318,"incr":1485,"addlPay":0,"tiffin":0,"gross":15978,"lastAdv":0,"cashAdv":0,"bankAdv":5000,"payable":10978,"bankPay":9521,"pf":1100,"emi":0,"prevBal":0,"cashToPay":357,"status":"pending","note":"","saved":"23 Mar, 01:14 am"},{"id":"mn263jgtrt1","staffId":"mn262kerr5e","month":"Jan 2026","daysWorked":25,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":29,"basic":11600,"da":1160,"incr":1375,"addlPay":0,"tiffin":0,"gross":14135,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":9135,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":9135,"status":"pending","note":"","saved":"23 Mar, 01:16 am"},{"id":"mn267v7hwm7","staffId":"mn267gev4u0","month":"Jan 2026","daysWorked":30,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":34,"basic":9350,"da":935,"incr":1650,"addlPay":4500,"tiffin":0,"gross":16435,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":10435,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":10435,"status":"pending","note":"","saved":"23 Mar, 01:19 am"},{"id":"mn2mba479ni","staffId":"mn2matxnfh3","month":"Jan 2026","daysWorked":10,"halfDays":0,"fullDays":31,"fourDaysBonus":2,"totalDays":12,"basic":3600,"da":360,"incr":550,"addlPay":0,"tiffin":0,"gross":4510,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":-1490,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":-1490,"status":"pending","note":"","saved":"23 Mar, 08:50 am"},{"id":"mn2mcv27flj","staffId":"mn2mc63ewgu","month":"Jan 2026","daysWorked":24,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":28,"basic":5600,"da":560,"incr":1320,"addlPay":0,"tiffin":0,"gross":7480,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":-520,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":-520,"status":"pending","note":"","saved":"23 Mar, 08:51 am"},{"id":"mn2meegrpwd","staffId":"mn2mdwwgohn","month":"Jan 2026","daysWorked":21,"halfDays":0,"fullDays":31,"fourDaysBonus":3,"totalDays":24,"basic":4800,"da":480,"incr":1155,"addlPay":0,"tiffin":0,"gross":6435,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":6435,"bankPay":5316,"pf":776,"emi":0,"prevBal":0,"cashToPay":343,"status":"pending","note":"","saved":"23 Mar, 08:52 am"},{"id":"mn2mftrd27l","staffId":"mn2mfezr37q","month":"Jan 2026","daysWorked":25,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":29,"basic":7250,"da":725,"incr":1375,"addlPay":0,"tiffin":0,"gross":9350,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":9350,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":9350,"status":"pending","note":"","saved":"23 Mar, 08:53 am"},{"id":"mn2mim3lvxd","staffId":"mn2mgt9n6zw","month":"Jan 2026","daysWorked":25,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":29,"basic":5075,"da":508,"incr":1375,"addlPay":0,"tiffin":0,"gross":6958,"lastAdv":0,"cashAdv":3000,"bankAdv":0,"payable":3958,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3958,"status":"pending","note":"","saved":"23 Mar, 08:55 am"},{"id":"mn2mkkzterd","staffId":"mn2mk369vxo","month":"Jan 2026","daysWorked":31,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":35,"basic":7000,"da":0,"incr":1550,"addlPay":0,"tiffin":0,"gross":8550,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":8550,"bankPay":7636,"pf":971,"emi":0,"prevBal":0,"cashToPay":-57,"status":"pending","note":"","saved":"23 Mar, 08:57 am"},{"id":"mn2mmw14j1f","staffId":"mn2mlz55zjm","month":"Jan 2026","daysWorked":25,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":29,"basic":11600,"da":1160,"incr":1375,"addlPay":0,"tiffin":0,"gross":14135,"lastAdv":0,"cashAdv":0,"bankAdv":10000,"payable":4135,"bankPay":744,"pf":1279,"emi":1112,"prevBal":150,"cashToPay":850,"status":"pending","note":"","saved":"23 Mar, 08:59 am"},{"id":"mn2mpnf6st7","staffId":"mn2mnxtfuwt","month":"Jan 2026","daysWorked":30,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":34,"basic":11900,"da":0,"incr":1500,"addlPay":0,"tiffin":0,"gross":13400,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":13400,"bankPay":9964,"pf":1164,"emi":0,"prevBal":0,"cashToPay":2272,"status":"pending","note":"","saved":"23 Mar, 09:01 am"},{"id":"mn2mse02pjq","staffId":"mn2mqoo8muj","month":"Jan 2026","daysWorked":12.5,"halfDays":0,"fullDays":31,"fourDaysBonus":2,"totalDays":14.5,"basic":3988,"da":399,"incr":688,"addlPay":625,"tiffin":0,"gross":5699,"lastAdv":0,"cashAdv":1000,"bankAdv":0,"payable":4699,"bankPay":0,"pf":0,"emi":0,"prevBal":600,"cashToPay":4099,"status":"pending","note":"","saved":"23 Mar, 09:03 am"},{"id":"mn2mtn5ycje","staffId":"mn2mt5g61si","month":"Jan 2026","daysWorked":26,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":30,"basic":8250,"da":825,"incr":1430,"addlPay":0,"tiffin":0,"gross":10505,"lastAdv":0,"cashAdv":10000,"bankAdv":0,"payable":505,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":505,"status":"pending","note":"","saved":"23 Mar, 09:04 am"},{"id":"mn2mwat7i91","staffId":"mn2muwh79kt","month":"Jan 2026","daysWorked":24,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":28,"basic":8820,"da":882,"incr":1320,"addlPay":2000,"tiffin":0,"gross":13022,"lastAdv":0,"cashAdv":15500,"bankAdv":0,"payable":-2478,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":-2478,"status":"pending","note":"","saved":"23 Mar, 09:06 am"},{"id":"mn2mxyz1rmn","staffId":"mn2mxbhwhcl","month":"Jan 2026","daysWorked":29,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":33,"basic":9900,"da":0,"incr":0,"addlPay":0,"tiffin":0,"gross":9900,"lastAdv":0,"cashAdv":4000,"bankAdv":0,"payable":5900,"bankPay":5309,"pf":776,"emi":0,"prevBal":0,"cashToPay":-185,"status":"pending","note":"","saved":"23 Mar, 09:07 am"},{"id":"mn2n04xt3u2","staffId":"mn2myt2vjth","month":"Jan 2026","daysWorked":30,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":34,"basic":10200,"da":1020,"incr":3150,"addlPay":0,"tiffin":0,"gross":14370,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":9370,"bankPay":7870,"pf":1100,"emi":0,"prevBal":0,"cashToPay":400,"status":"pending","note":"","saved":"23 Mar, 09:09 am"},{"id":"mn2n26thoxj","staffId":"mn2n15zzz3v","month":"Jan 2026","daysWorked":20.5,"halfDays":0,"fullDays":31,"fourDaysBonus":3,"totalDays":23.5,"basic":10575,"da":0,"incr":1025,"addlPay":0,"tiffin":0,"gross":11600,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":11600,"bankPay":11600,"pf":0,"emi":0,"prevBal":0,"cashToPay":0,"status":"pending","note":"","saved":"23 Mar, 09:11 am"},{"id":"mn2n3mrk0nj","staffId":"mn2n3916fwi","month":"Jan 2026","daysWorked":24,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":28,"basic":6580,"da":658,"incr":1320,"addlPay":0,"tiffin":0,"gross":8558,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":2558,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":2558,"status":"pending","note":"","saved":"23 Mar, 09:12 am"},{"id":"mn2n5376bm7","staffId":"mn2n4min1i5","month":"Jan 2026","daysWorked":31,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":35,"basic":14000,"da":0,"incr":1550,"addlPay":0,"tiffin":0,"gross":15550,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":15550,"bankPay":0,"pf":0,"emi":0,"prevBal":19650,"cashToPay":-4100,"status":"pending","note":"","saved":"23 Mar, 09:13 am"},{"id":"mn2n6olu1c0","staffId":"mn2n6bsrzvi","month":"Jan 2026","daysWorked":26,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":30,"basic":9450,"da":945,"incr":2600,"addlPay":0,"tiffin":0,"gross":12995,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":12995,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":12995,"status":"pending","note":"","saved":"23 Mar, 09:14 am"},{"id":"mn2nad54373","staffId":"mn2n9zhwif8","month":"Jan 2026","daysWorked":25,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":29,"basic":11600,"da":0,"incr":1250,"addlPay":0,"tiffin":0,"gross":12850,"lastAdv":0,"cashAdv":3000,"bankAdv":0,"payable":9850,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":9850,"status":"pending","note":"","saved":"23 Mar, 09:17 am"},{"id":"mn2nbg3w20r","staffId":"mn2nb30k7xp","month":"Jan 2026","daysWorked":21,"halfDays":0,"fullDays":31,"fourDaysBonus":3,"totalDays":24,"basic":6600,"da":0,"incr":1050,"addlPay":0,"tiffin":0,"gross":7650,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":7650,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":7650,"status":"pending","note":"","saved":"23 Mar, 09:18 am"},{"id":"mn2nd1qbyj6","staffId":"mn2nck2b0gy","month":"Jan 2026","daysWorked":29,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":33,"basic":13200,"da":0,"incr":1450,"addlPay":1450,"tiffin":0,"gross":16100,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":16100,"bankPay":10848,"pf":1294,"emi":0,"prevBal":0,"cashToPay":3958,"status":"pending","note":"","saved":"23 Mar, 09:19 am"},{"id":"mn2newit3sh","staffId":"mn2ndsqmb7p","month":"Jan 2026","daysWorked":28,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":32,"basic":8000,"da":0,"incr":1400,"addlPay":0,"tiffin":0,"gross":9400,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":9400,"bankPay":0,"pf":0,"emi":833,"prevBal":0,"cashToPay":8567,"status":"pending","note":"","saved":"23 Mar, 09:21 am"},{"id":"mn2s10v4889","staffId":"mn2r6vj02vx","month":"Jan 2026","daysWorked":26,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":30,"basic":15000,"da":1500,"incr":1430,"addlPay":0,"tiffin":0,"gross":17930,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":17930,"bankPay":15848,"pf":1294,"emi":0,"prevBal":0,"cashToPay":788,"status":"pending","note":"","saved":"23 Mar, 11:30 am"},{"id":"mn2s1rah4qt","staffId":"mn2rlim5wxo","month":"Jan 2026","daysWorked":31,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":35,"basic":7875,"da":0,"incr":1550,"addlPay":0,"tiffin":0,"gross":9425,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":9425,"bankPay":6423,"pf":648,"emi":0,"prevBal":0,"cashToPay":2354,"status":"pending","note":"","saved":"23 Mar, 11:30 am"},{"id":"mn2s6un6xy9","staffId":"mn2rny1dbpu","month":"Jan 2026","daysWorked":22,"halfDays":0,"fullDays":31,"fourDaysBonus":3,"totalDays":25,"basic":10000,"da":0,"incr":1100,"addlPay":0,"tiffin":0,"gross":11100,"lastAdv":0,"cashAdv":2000,"bankAdv":0,"payable":9100,"bankPay":8136,"pf":971,"emi":0,"prevBal":0,"cashToPay":-7,"status":"pending","note":"","saved":"23 Mar, 11:34 am"},{"id":"mn2s8q0vs8c","staffId":"mn2rram9rz0","month":"Jan 2026","daysWorked":30,"halfDays":0,"fullDays":31,"fourDaysBonus":0,"totalDays":30,"basic":6600,"da":0,"incr":0,"addlPay":1000,"tiffin":0,"gross":7600,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":600,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":600,"status":"pending","note":"","saved":"23 Mar, 11:36 am"},{"id":"mn2s9k02xqa","staffId":"mn2rsviergy","month":"Jan 2026","daysWorked":24,"halfDays":0,"fullDays":31,"fourDaysBonus":0,"totalDays":24,"basic":24000,"da":0,"incr":0,"addlPay":0,"tiffin":0,"gross":24000,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":24000,"bankPay":13659,"pf":1705,"emi":0,"prevBal":0,"cashToPay":8636,"status":"pending","note":"","saved":"23 Mar, 11:36 am"},{"id":"mn2sat0lohi","staffId":"mn2ru03wznw","month":"Jan 2026","daysWorked":22,"halfDays":0,"fullDays":31,"fourDaysBonus":3,"totalDays":25,"basic":4375,"da":0,"incr":1100,"addlPay":1100,"tiffin":0,"gross":6575,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":575,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":575,"status":"pending","note":"Impart and Advance both same","saved":"23 Mar, 11:37 am"},{"id":"mn2sngfhyd1","staffId":"mn2ruxfmfaz","month":"Jan 2026","daysWorked":0,"halfDays":0,"fullDays":31,"fourDaysBonus":0,"totalDays":0,"basic":0,"da":0,"incr":0,"addlPay":11000,"tiffin":0,"gross":11000,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":11000,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":11000,"status":"pending","note":"","saved":"23 Mar, 11:47 am"},{"id":"mn2snz34qch","staffId":"mn2ry2g0hyx","month":"Jan 2026","daysWorked":30,"halfDays":0,"fullDays":31,"fourDaysBonus":0,"totalDays":30,"basic":9600,"da":0,"incr":0,"addlPay":1600,"tiffin":0,"gross":11200,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":6200,"bankPay":5136,"pf":971,"emi":0,"prevBal":0,"cashToPay":93,"status":"pending","note":"","saved":"23 Mar, 11:48 am"},{"id":"mn2sobfy6jz","staffId":"mn2rz6d7ng7","month":"Jan 2026","daysWorked":30,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":34,"basic":9350,"da":0,"incr":1500,"addlPay":0,"tiffin":0,"gross":10850,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":2850,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":2850,"status":"pending","note":"","saved":"23 Mar, 11:48 am"},{"id":"mn2sp5e1tzp","staffId":"mn2r7ppxgxp","month":"Jan 2026","daysWorked":27.5,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":31.5,"basic":13388,"da":0,"incr":1375,"addlPay":0,"tiffin":0,"gross":14763,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":14763,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":14763,"status":"pending","note":"","saved":"23 Mar, 11:48 am"},{"id":"mn2tbco4tx9","staffId":"mn2s0gqgk8j","month":"Jan 2026","daysWorked":0,"halfDays":0,"fullDays":31,"fourDaysBonus":0,"totalDays":0,"basic":0,"da":0,"incr":0,"addlPay":15000,"tiffin":0,"gross":15000,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":8000,"bankPay":7136,"pf":971,"emi":0,"prevBal":0,"cashToPay":-107,"status":"pending","note":"","saved":"23 Mar, 12:06 pm"},{"id":"mn2tdf546y6","staffId":"mn2r93birva","month":"Jan 2026","daysWorked":30,"halfDays":0,"fullDays":31,"fourDaysBonus":4,"totalDays":34,"basic":7480,"da":0,"incr":1499,"addlPay":1500,"tiffin":0,"gross":10479,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":10479,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":10479,"status":"pending","note":"","saved":"23 Mar, 12:07 pm"},{"id":"mn36dm9tdjg","staffId":"mn14nftnmjb","month":"Feb 2026","daysWorked":23,"halfDays":6,"fullDays":22,"fourDaysBonus":4,"totalDays":27,"basic":9990,"da":999,"incr":1265,"addlPay":0,"tiffin":1540,"gross":13794,"lastAdv":0,"cashAdv":2000,"bankAdv":8000,"payable":3794,"bankPay":1838,"pf":1438,"emi":0,"prevBal":0,"cashToPay":518,"status":"pending","note":"","saved":"23 Mar, 06:11 pm"},{"id":"mn36ehifgfw","staffId":"mn14s6eimvy","month":"Feb 2026","daysWorked":24,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":28,"basic":11480,"da":1148,"incr":1320,"addlPay":0,"tiffin":1680,"gross":15628,"lastAdv":0,"cashAdv":1000,"bankAdv":5000,"payable":9628,"bankPay":7839,"pf":1438,"emi":0,"prevBal":0,"cashToPay":351,"status":"pending","note":"","saved":"23 Mar, 06:12 pm"},{"id":"mn36f145636","staffId":"mn14ssh0iax","month":"Feb 2026","daysWorked":27,"halfDays":1,"fullDays":27,"fourDaysBonus":4,"totalDays":31,"basic":20150,"da":2015,"incr":1485,"addlPay":0,"tiffin":1890,"gross":25540,"lastAdv":0,"cashAdv":15000,"bankAdv":0,"payable":10540,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":10540,"status":"pending","note":"","saved":"23 Mar, 06:13 pm"},{"id":"mn36fkweyr3","staffId":"mn14tb9dx53","month":"Feb 2026","daysWorked":25,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":29,"basic":6525,"da":653,"incr":1375,"addlPay":0,"tiffin":1680,"gross":10233,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":3233,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3233,"status":"pending","note":"","saved":"23 Mar, 06:13 pm"},{"id":"mn36ge76nup","staffId":"mn15o8g6snh","month":"Feb 2026","daysWorked":24,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":28,"basic":7336,"da":734,"incr":1320,"addlPay":0,"tiffin":1680,"gross":11070,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":3070,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3070,"status":"pending","note":"","saved":"23 Mar, 06:14 pm"},{"id":"mn36haoqhwo","staffId":"mn15oz74k7x","month":"Feb 2026","daysWorked":27,"halfDays":2,"fullDays":26,"fourDaysBonus":4,"totalDays":31,"basic":6200,"da":620,"incr":1485,"addlPay":0,"tiffin":1820,"gross":10125,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":5125,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":5125,"status":"pending","note":"","saved":"23 Mar, 06:14 pm"},{"id":"mn36hqx2q28","staffId":"mn15ql3t3u1","month":"Feb 2026","daysWorked":1,"halfDays":27,"fullDays":1,"fourDaysBonus":0,"totalDays":1,"basic":245,"da":25,"incr":55,"addlPay":100,"tiffin":0,"gross":425,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":425,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":425,"status":"pending","note":"","saved":"23 Mar, 06:15 pm"},{"id":"mn36ihuk159","staffId":"mn15s8bbiuv","month":"Feb 2026","daysWorked":25,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":29,"basic":8265,"da":827,"incr":1375,"addlPay":0,"tiffin":0,"gross":10467,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":10467,"bankPay":9466,"pf":1092,"emi":0,"prevBal":0,"cashToPay":-91,"status":"pending","note":"","saved":"23 Mar, 06:15 pm"},{"id":"mn36jrpp38z","staffId":"mn16kn6qtu1","month":"Feb 2026","daysWorked":14,"halfDays":14,"fullDays":14,"fourDaysBonus":2,"totalDays":16,"basic":4512,"da":451,"incr":770,"addlPay":0,"tiffin":980,"gross":6713,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":6713,"bankPay":5559,"pf":959,"emi":0,"prevBal":0,"cashToPay":195,"status":"pending","note":"","saved":"23 Mar, 06:16 pm"},{"id":"mn36mbussjr","staffId":"mn18i38ywi5","month":"Feb 2026","daysWorked":28,"halfDays":0,"fullDays":28,"fourDaysBonus":6,"totalDays":34,"basic":13600,"da":1360,"incr":1540,"addlPay":3000,"tiffin":2800,"gross":22300,"lastAdv":0,"cashAdv":10000,"bankAdv":0,"payable":12300,"bankPay":8118,"pf":1917,"emi":0,"prevBal":0,"cashToPay":2265,"status":"pending","note":"","saved":"23 Mar, 06:18 pm"},{"id":"mn36mzlvat4","staffId":"mn19ps9ubws","month":"Feb 2026","daysWorked":28,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":32,"basic":6400,"da":640,"incr":1540,"addlPay":0,"tiffin":1680,"gross":10260,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":4260,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":4260,"status":"pending","note":"","saved":"23 Mar, 06:19 pm"},{"id":"mn36o47fndx","staffId":"mn1l7u83buz","month":"Feb 2026","daysWorked":24,"halfDays":5,"fullDays":23,"fourDaysBonus":4,"totalDays":28,"basic":6580,"da":658,"incr":1320,"addlPay":0,"tiffin":1610,"gross":10168,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":2168,"bankPay":0,"pf":1164,"emi":1250,"prevBal":0,"cashToPay":-246,"status":"pending","note":"","saved":"23 Mar, 06:20 pm"},{"id":"mn36p78ykfm","staffId":"mn1l93zcqho","month":"Feb 2026","daysWorked":22,"halfDays":7,"fullDays":21,"fourDaysBonus":3,"totalDays":25,"basic":7500,"da":750,"incr":1210,"addlPay":0,"tiffin":1470,"gross":10930,"lastAdv":0,"cashAdv":2000,"bankAdv":0,"payable":8930,"bankPay":7969,"pf":1018,"emi":0,"prevBal":0,"cashToPay":-57,"status":"pending","note":"","saved":"23 Mar, 06:20 pm"},{"id":"mn36pya4lc7","staffId":"mn1lbvmi8nd","month":"Feb 2026","daysWorked":24,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":28,"basic":6300,"da":630,"incr":1320,"addlPay":0,"tiffin":1680,"gross":9930,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":3930,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3930,"status":"pending","note":"","saved":"23 Mar, 06:21 pm"},{"id":"mn36qljd675","staffId":"mn1lcqn730m","month":"Feb 2026","daysWorked":23,"halfDays":5,"fullDays":23,"fourDaysBonus":4,"totalDays":27,"basic":4860,"da":486,"incr":1265,"addlPay":0,"tiffin":1610,"gross":8221,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":3221,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3221,"status":"pending","note":"","saved":"23 Mar, 06:22 pm"},{"id":"mn36qyzm8rl","staffId":"mn1ldz6gn2k","month":"Feb 2026","daysWorked":24,"halfDays":5,"fullDays":23,"fourDaysBonus":4,"totalDays":28,"basic":9520,"da":952,"incr":1320,"addlPay":0,"tiffin":1610,"gross":13402,"lastAdv":0,"cashAdv":11000,"bankAdv":0,"payable":2402,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":2402,"status":"pending","note":"","saved":"23 Mar, 06:22 pm"},{"id":"mn36rj6qs7v","staffId":"mn1lfs2ok4x","month":"Feb 2026","daysWorked":23,"halfDays":7,"fullDays":21,"fourDaysBonus":4,"totalDays":27,"basic":9450,"da":0,"incr":1150,"addlPay":0,"tiffin":1470,"gross":12070,"lastAdv":0,"cashAdv":15000,"bankAdv":0,"payable":-2930,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":-2930,"status":"pending","note":"","saved":"23 Mar, 06:22 pm"},{"id":"mn36sr97vve","staffId":"mn1lhdtlv87","month":"Feb 2026","daysWorked":27,"halfDays":2,"fullDays":26,"fourDaysBonus":4,"totalDays":31,"basic":9300,"da":0,"incr":0,"addlPay":0,"tiffin":1820,"gross":11120,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":4120,"bankPay":0,"pf":0,"emi":3334,"prevBal":0,"cashToPay":786,"status":"pending","note":"","saved":"23 Mar, 06:23 pm"},{"id":"mn36t6t8b49","staffId":"mn1lib1p1mg","month":"Feb 2026","daysWorked":24,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":28,"basic":7140,"da":714,"incr":1320,"addlPay":0,"tiffin":1680,"gross":10854,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":5854,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":5854,"status":"pending","note":"","saved":"23 Mar, 06:24 pm"},{"id":"mn36txb0a9z","staffId":"mn1vjgrk82c","month":"Feb 2026","daysWorked":27,"halfDays":2,"fullDays":26,"fourDaysBonus":4,"totalDays":31,"basic":7440,"da":744,"incr":1485,"addlPay":0,"tiffin":1820,"gross":11489,"lastAdv":0,"cashAdv":4000,"bankAdv":0,"payable":7489,"bankPay":5989,"pf":874,"emi":0,"prevBal":0,"cashToPay":626,"status":"pending","note":"","saved":"23 Mar, 06:24 pm"},{"id":"mn36ubyphr7","staffId":"mn1vkdra1fz","month":"Feb 2026","daysWorked":27,"halfDays":2,"fullDays":26,"fourDaysBonus":4,"totalDays":31,"basic":8525,"da":0,"incr":0,"addlPay":0,"tiffin":1820,"gross":10345,"lastAdv":0,"cashAdv":9000,"bankAdv":0,"payable":1345,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":1345,"status":"pending","note":"","saved":"23 Mar, 06:24 pm"},{"id":"mn36uskwd91","staffId":"mn1vlqdqkb6","month":"Feb 2026","daysWorked":27,"halfDays":1,"fullDays":27,"fourDaysBonus":4,"totalDays":31,"basic":6820,"da":682,"incr":1485,"addlPay":0,"tiffin":1890,"gross":10877,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":10877,"bankPay":8471,"pf":946,"emi":0,"prevBal":0,"cashToPay":1460,"status":"pending","note":"","saved":"23 Mar, 06:25 pm"},{"id":"mn36v8u5kym","staffId":"mn1vmd7zf3x","month":"Feb 2026","daysWorked":25,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":29,"basic":5800,"da":580,"incr":1375,"addlPay":0,"tiffin":1680,"gross":9435,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":4435,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":4435,"status":"pending","note":"","saved":"23 Mar, 06:25 pm"},{"id":"mn36w50i2bu","staffId":"mn1vn2xgqwn","month":"Feb 2026","daysWorked":27,"halfDays":1,"fullDays":27,"fourDaysBonus":4,"totalDays":31,"basic":12710,"da":1271,"incr":1485,"addlPay":2000,"tiffin":2700,"gross":20166,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":13166,"bankPay":8969,"pf":1018,"emi":3194,"prevBal":0,"cashToPay":-15,"status":"pending","note":"","saved":"23 Mar, 06:26 pm"},{"id":"mn36wrkqrg5","staffId":"mn1vzp3nyn0","month":"Feb 2026","daysWorked":26,"halfDays":3,"fullDays":25,"fourDaysBonus":4,"totalDays":30,"basic":6000,"da":600,"incr":1430,"addlPay":0,"tiffin":1750,"gross":9780,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":1780,"bankPay":0,"pf":0,"emi":1500,"prevBal":0,"cashToPay":280,"status":"pending","note":"","saved":"23 Mar, 06:26 pm"},{"id":"mn36x70de6p","staffId":"mn24mken1eb","month":"Feb 2026","daysWorked":27,"halfDays":1,"fullDays":27,"fourDaysBonus":4,"totalDays":31,"basic":7750,"da":775,"incr":1485,"addlPay":0,"tiffin":1890,"gross":11900,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":6900,"bankPay":5870,"pf":1151,"emi":0,"prevBal":0,"cashToPay":-121,"status":"pending","note":"","saved":"23 Mar, 06:27 pm"},{"id":"mn36xn2k82p","staffId":"mn24nsh8zz7","month":"Feb 2026","daysWorked":25,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":29,"basic":8700,"da":870,"incr":1375,"addlPay":0,"tiffin":1680,"gross":12625,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":4625,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":4625,"status":"pending","note":"","saved":"23 Mar, 06:27 pm"},{"id":"mn36z41wx6m","staffId":"mn24p6c6vgq","month":"Feb 2026","daysWorked":26,"halfDays":2,"fullDays":26,"fourDaysBonus":4,"totalDays":30,"basic":4500,"da":450,"incr":1430,"addlPay":0,"tiffin":1820,"gross":8200,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":3200,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3200,"status":"pending","note":"","saved":"23 Mar, 06:28 pm"},{"id":"mn373wf88n2","staffId":"mn24q5ue3a1","month":"Feb 2026","daysWorked":26,"halfDays":2,"fullDays":26,"fourDaysBonus":4,"totalDays":30,"basic":6000,"da":600,"incr":1430,"addlPay":0,"tiffin":1820,"gross":9850,"lastAdv":0,"cashAdv":9500,"bankAdv":6000,"payable":-5650,"bankPay":0,"pf":728,"emi":0,"prevBal":0,"cashToPay":-6378,"status":"pending","note":"","saved":"23 Mar, 06:32 pm"},{"id":"mn374i8nz7s","staffId":"mn24t49xg7q","month":"Feb 2026","daysWorked":24,"halfDays":5,"fullDays":23,"fourDaysBonus":4,"totalDays":28,"basic":5600,"da":560,"incr":1320,"addlPay":0,"tiffin":1610,"gross":9090,"lastAdv":0,"cashAdv":8000,"bankAdv":0,"payable":1090,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":1090,"status":"pending","note":"","saved":"23 Mar, 06:32 pm"},{"id":"mn3751zyz3i","staffId":"mn24u3jbjaf","month":"Feb 2026","daysWorked":28,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":32,"basic":7200,"da":720,"incr":1540,"addlPay":0,"tiffin":1960,"gross":11420,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":5420,"bankPay":3445,"pf":874,"emi":1083,"prevBal":0,"cashToPay":18,"status":"pending","note":"","saved":"23 Mar, 06:33 pm"},{"id":"mn375q7a95e","staffId":"mn24wfeabi9","month":"Feb 2026","daysWorked":23,"halfDays":6,"fullDays":22,"fourDaysBonus":4,"totalDays":27,"basic":9045,"da":905,"incr":1265,"addlPay":0,"tiffin":2200,"gross":13415,"lastAdv":0,"cashAdv":2000,"bankAdv":10000,"payable":1415,"bankPay":0,"pf":1018,"emi":0,"prevBal":0,"cashToPay":397,"status":"pending","note":"","saved":"23 Mar, 06:33 pm"},{"id":"mn376le35nr","staffId":"mn24xq2fovm","month":"Feb 2026","daysWorked":26,"halfDays":3,"fullDays":25,"fourDaysBonus":4,"totalDays":30,"basic":9000,"da":900,"incr":1430,"addlPay":0,"tiffin":1750,"gross":13080,"lastAdv":0,"cashAdv":3000,"bankAdv":7000,"payable":3080,"bankPay":2526,"pf":1247,"emi":0,"prevBal":0,"cashToPay":-693,"status":"pending","note":"","saved":"23 Mar, 06:34 pm"},{"id":"mn377nzwt0l","staffId":"mn250atw3x3","month":"Feb 2026","daysWorked":25,"halfDays":5,"fullDays":23,"fourDaysBonus":4,"totalDays":29,"basic":7830,"da":783,"incr":1375,"addlPay":0,"tiffin":1610,"gross":11598,"lastAdv":0,"cashAdv":10500,"bankAdv":5000,"payable":-3902,"bankPay":0,"pf":0,"emi":0,"prevBal":1000,"cashToPay":-4902,"status":"pending","note":"","saved":"23 Mar, 06:35 pm"},{"id":"mn3786dzbnv","staffId":"mn256gbug8d","month":"Feb 2026","daysWorked":14,"halfDays":14,"fullDays":14,"fourDaysBonus":2,"totalDays":16,"basic":4000,"da":0,"incr":0,"addlPay":0,"tiffin":980,"gross":4980,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":-2020,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":-2020,"status":"pending","note":"","saved":"23 Mar, 06:35 pm"},{"id":"mn378v8k2po","staffId":"mn25ale6met","month":"Feb 2026","daysWorked":27,"halfDays":2,"fullDays":26,"fourDaysBonus":4,"totalDays":31,"basic":9300,"da":0,"incr":1350,"addlPay":0,"tiffin":1820,"gross":12470,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":12470,"bankPay":7972,"pf":874,"emi":0,"prevBal":0,"cashToPay":3624,"status":"pending","note":"","saved":"23 Mar, 06:36 pm"},{"id":"mn379dluj26","staffId":"mn25cl53lgq","month":"Feb 2026","daysWorked":27,"halfDays":1,"fullDays":27,"fourDaysBonus":4,"totalDays":31,"basic":9300,"da":0,"incr":0,"addlPay":0,"tiffin":1890,"gross":11190,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":11190,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":11190,"status":"pending","note":"","saved":"23 Mar, 06:36 pm"},{"id":"mn37a64fv5v","staffId":"mn25fl1e8tv","month":"Feb 2026","daysWorked":27,"halfDays":1,"fullDays":27,"fourDaysBonus":4,"totalDays":31,"basic":9610,"da":961,"incr":1485,"addlPay":0,"tiffin":2700,"gross":14756,"lastAdv":0,"cashAdv":15000,"bankAdv":0,"payable":-244,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":-244,"status":"pending","note":"","saved":"23 Mar, 06:37 pm"},{"id":"mn37b6azzd5","staffId":"mn25ie048f0","month":"Feb 2026","daysWorked":24,"halfDays":5,"fullDays":23,"fourDaysBonus":4,"totalDays":28,"basic":7700,"da":770,"incr":1320,"addlPay":0,"tiffin":1610,"gross":11400,"lastAdv":0,"cashAdv":0,"bankAdv":5000,"payable":6400,"bankPay":3889,"pf":1438,"emi":1000,"prevBal":0,"cashToPay":73,"status":"pending","note":"","saved":"23 Mar, 06:38 pm"},{"id":"mn37c89cyg8","staffId":"mn25k1ntebn","month":"Feb 2026","daysWorked":28,"halfDays":0,"fullDays":28,"fourDaysBonus":6,"totalDays":34,"basic":13600,"da":1360,"incr":1540,"addlPay":0,"tiffin":2800,"gross":19300,"lastAdv":0,"cashAdv":0,"bankAdv":15000,"payable":4300,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":4300,"status":"pending","note":"","saved":"23 Mar, 06:38 pm"},{"id":"mn37crl728d","staffId":"mn25li7hw8c","month":"Feb 2026","daysWorked":9,"halfDays":19,"fullDays":9,"fourDaysBonus":2,"totalDays":11,"basic":3300,"da":0,"incr":0,"addlPay":0,"tiffin":810,"gross":4110,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":4110,"bankPay":0,"pf":0,"emi":2000,"prevBal":0,"cashToPay":2110,"status":"pending","note":"","saved":"23 Mar, 06:39 pm"},{"id":"mn37dabmbxe","staffId":"mn25oaevpg8","month":"Feb 2026","daysWorked":24,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":28,"basic":5040,"da":504,"incr":1320,"addlPay":0,"tiffin":1680,"gross":8544,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":3544,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":3544,"status":"pending","note":"","saved":"23 Mar, 06:39 pm"},{"id":"mn37hzipxwh","staffId":"mn25q07ytpr","month":"Feb 2026","daysWorked":25,"halfDays":4,"fullDays":24,"fourDaysBonus":4,"totalDays":29,"basic":6525,"da":0,"incr":0,"addlPay":0,"tiffin":1680,"gross":8205,"lastAdv":0,"cashAdv":15000,"bankAdv":0,"payable":-6795,"bankPay":0,"pf":0,"emi":0,"prevBal":7630,"cashToPay":-14425,"status":"pending","note":"","saved":"23 Mar, 06:43 pm"},{"id":"mn37itk1wyd","staffId":"mn25st9h24p","month":"Feb 2026","daysWorked":28,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":32,"basic":7200,"da":720,"incr":1540,"addlPay":3500,"tiffin":0,"gross":12960,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":12960,"bankPay":11839,"pf":1438,"emi":0,"prevBal":0,"cashToPay":-317,"status":"pending","note":"","saved":"23 Mar, 06:43 pm"},{"id":"mn37jdb4stm","staffId":"mn25ugopvlw","month":"Feb 2026","daysWorked":18,"halfDays":0,"fullDays":28,"fourDaysBonus":3,"totalDays":21,"basic":7245,"da":725,"incr":990,"addlPay":0,"tiffin":0,"gross":8960,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":1960,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":1960,"status":"pending","note":"","saved":"23 Mar, 06:44 pm"},{"id":"mn37jns26e7","staffId":"mn25xdi0n17","month":"Feb 2026","daysWorked":25,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":29,"basic":7975,"da":798,"incr":1375,"addlPay":0,"tiffin":0,"gross":10148,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":10148,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":10148,"status":"pending","note":"","saved":"23 Mar, 06:44 pm"},{"id":"mn37k719ic9","staffId":"mn25ycbp3dn","month":"Feb 2026","daysWorked":26,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":30,"basic":6000,"da":600,"incr":1430,"addlPay":0,"tiffin":0,"gross":8030,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":1030,"bankPay":0,"pf":0,"emi":0,"prevBal":2240,"cashToPay":-1210,"status":"pending","note":"","saved":"23 Mar, 06:45 pm"},{"id":"mn37kujjci0","staffId":"mn260bvlh7r","month":"Feb 2026","daysWorked":23,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":27,"basic":11475,"da":1148,"incr":1265,"addlPay":0,"tiffin":0,"gross":13888,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":8888,"bankPay":8471,"pf":946,"emi":0,"prevBal":0,"cashToPay":-529,"status":"pending","note":"","saved":"23 Mar, 06:45 pm"},{"id":"mn37lhv14jt","staffId":"mn262kerr5e","month":"Feb 2026","daysWorked":26,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":30,"basic":12000,"da":1200,"incr":1430,"addlPay":0,"tiffin":0,"gross":14630,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":9630,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":9630,"status":"pending","note":"","saved":"23 Mar, 06:46 pm"},{"id":"mn37m8zm8z6","staffId":"mn267gev4u0","month":"Feb 2026","daysWorked":24,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":28,"basic":7700,"da":770,"incr":1320,"addlPay":3600,"tiffin":0,"gross":13390,"lastAdv":0,"cashAdv":4000,"bankAdv":0,"payable":9390,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":9390,"status":"pending","note":"","saved":"23 Mar, 06:46 pm"},{"id":"mn37mpjluet","staffId":"mn2matxnfh3","month":"Feb 2026","daysWorked":14,"halfDays":0,"fullDays":28,"fourDaysBonus":2,"totalDays":16,"basic":4800,"da":480,"incr":770,"addlPay":0,"tiffin":0,"gross":6050,"lastAdv":0,"cashAdv":11000,"bankAdv":0,"payable":-4950,"bankPay":0,"pf":0,"emi":0,"prevBal":1490,"cashToPay":-6440,"status":"pending","note":"","saved":"23 Mar, 06:46 pm"},{"id":"mn37nh9s1pi","staffId":"mn2mc63ewgu","month":"Feb 2026","daysWorked":20,"halfDays":0,"fullDays":28,"fourDaysBonus":3,"totalDays":23,"basic":4600,"da":460,"incr":1100,"addlPay":0,"tiffin":0,"gross":6160,"lastAdv":0,"cashAdv":14000,"bankAdv":0,"payable":-7840,"bankPay":0,"pf":0,"emi":0,"prevBal":520,"cashToPay":-8360,"status":"pending","note":"","saved":"23 Mar, 06:47 pm"},{"id":"mn37oi4dg46","staffId":"mn2mdwwgohn","month":"Feb 2026","daysWorked":24,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":28,"basic":5600,"da":560,"incr":1320,"addlPay":0,"tiffin":0,"gross":7480,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":7480,"bankPay":7972,"pf":874,"emi":0,"prevBal":0,"cashToPay":-1366,"status":"pending","note":"","saved":"23 Mar, 06:48 pm"},{"id":"mn37p1hssqn","staffId":"mn2mfezr37q","month":"Feb 2026","daysWorked":25,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":29,"basic":7250,"da":725,"incr":1375,"addlPay":0,"tiffin":0,"gross":9350,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":9350,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":9350,"status":"pending","note":"","saved":"23 Mar, 06:48 pm"},{"id":"mn37pgnj0ce","staffId":"mn2mgt9n6zw","month":"Feb 2026","daysWorked":24,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":28,"basic":4900,"da":490,"incr":1320,"addlPay":0,"tiffin":0,"gross":6710,"lastAdv":0,"cashAdv":13000,"bankAdv":0,"payable":-6290,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":-6290,"status":"pending","note":"","saved":"23 Mar, 06:49 pm"},{"id":"mn37qcu42j9","staffId":"mn2mk369vxo","month":"Feb 2026","daysWorked":24,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":28,"basic":5600,"da":0,"incr":1200,"addlPay":0,"tiffin":0,"gross":6800,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":6800,"bankPay":5969,"pf":1018,"emi":0,"prevBal":0,"cashToPay":-187,"status":"pending","note":"","saved":"23 Mar, 06:49 pm"},{"id":"mn37r1b4sn3","staffId":"mn2mlz55zjm","month":"Feb 2026","daysWorked":22,"halfDays":0,"fullDays":28,"fourDaysBonus":3,"totalDays":25,"basic":10000,"da":1000,"incr":1210,"addlPay":0,"tiffin":0,"gross":12210,"lastAdv":0,"cashAdv":2000,"bankAdv":10000,"payable":210,"bankPay":0,"pf":1151,"emi":1112,"prevBal":0,"cashToPay":-2053,"status":"pending","note":"","saved":"23 Mar, 06:50 pm"},{"id":"mn37rmdm0ts","staffId":"mn2mnxtfuwt","month":"Feb 2026","daysWorked":27,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":31,"basic":10850,"da":0,"incr":1350,"addlPay":0,"tiffin":0,"gross":12200,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":12200,"bankPay":9466,"pf":1092,"emi":0,"prevBal":0,"cashToPay":1642,"status":"pending","note":"","saved":"23 Mar, 06:50 pm"},{"id":"mn37sbg4nrb","staffId":"mn2mqoo8muj","month":"Feb 2026","daysWorked":12,"halfDays":0,"fullDays":28,"fourDaysBonus":2,"totalDays":14,"basic":3850,"da":385,"incr":660,"addlPay":600,"tiffin":0,"gross":5495,"lastAdv":0,"cashAdv":0,"bankAdv":7000,"payable":-1505,"bankPay":0,"pf":0,"emi":1250,"prevBal":0,"cashToPay":-2755,"status":"pending","note":"","saved":"23 Mar, 06:51 pm"},{"id":"mn37sumvgn7","staffId":"mn2mt5g61si","month":"Feb 2026","daysWorked":20,"halfDays":0,"fullDays":28,"fourDaysBonus":3,"totalDays":23,"basic":6325,"da":633,"incr":1100,"addlPay":0,"tiffin":0,"gross":8058,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":2058,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":2058,"status":"pending","note":"","saved":"23 Mar, 06:51 pm"},{"id":"mn37td01rho","staffId":"mn2muwh79kt","month":"Feb 2026","daysWorked":23,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":27,"basic":8505,"da":851,"incr":1265,"addlPay":2000,"tiffin":0,"gross":12621,"lastAdv":0,"cashAdv":13500,"bankAdv":0,"payable":-879,"bankPay":0,"pf":0,"emi":0,"prevBal":2470,"cashToPay":-3349,"status":"pending","note":"","saved":"23 Mar, 06:52 pm"},{"id":"mn37u1azu9o","staffId":"mn2mxbhwhcl","month":"Feb 2026","daysWorked":26,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":30,"basic":9000,"da":0,"incr":0,"addlPay":0,"tiffin":0,"gross":9000,"lastAdv":0,"cashAdv":4000,"bankAdv":0,"payable":5000,"bankPay":3972,"pf":874,"emi":0,"prevBal":0,"cashToPay":154,"status":"pending","note":"","saved":"23 Mar, 06:52 pm"},{"id":"mn37uny70ul","staffId":"mn2myt2vjth","month":"Feb 2026","daysWorked":27,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":31,"basic":9300,"da":930,"incr":2835,"addlPay":0,"tiffin":0,"gross":13065,"lastAdv":0,"cashAdv":5500,"bankAdv":0,"payable":7565,"bankPay":6472,"pf":874,"emi":0,"prevBal":0,"cashToPay":219,"status":"pending","note":"","saved":"23 Mar, 06:53 pm"},{"id":"mn37vk728mg","staffId":"mn2n15zzz3v","month":"Feb 2026","daysWorked":24,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":28,"basic":12600,"da":0,"incr":1200,"addlPay":0,"tiffin":0,"gross":13800,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":13800,"bankPay":0,"pf":0,"emi":0,"prevBal":10000,"cashToPay":3800,"status":"pending","note":"","saved":"23 Mar, 06:53 pm"},{"id":"mn37w2xrc7m","staffId":"mn2n3916fwi","month":"Feb 2026","daysWorked":26,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":30,"basic":7050,"da":705,"incr":1430,"addlPay":0,"tiffin":0,"gross":9185,"lastAdv":0,"cashAdv":3000,"bankAdv":4000,"payable":2185,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":2185,"status":"pending","note":"","saved":"23 Mar, 06:54 pm"},{"id":"mn37xh2qnc6","staffId":"mn2n4min1i5","month":"Feb 2026","daysWorked":27,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":31,"basic":12400,"da":0,"incr":1350,"addlPay":0,"tiffin":0,"gross":13750,"lastAdv":0,"cashAdv":40000,"bankAdv":0,"payable":-26250,"bankPay":0,"pf":0,"emi":0,"prevBal":4100,"cashToPay":-30350,"status":"pending","note":"","saved":"23 Mar, 06:55 pm"},{"id":"mn37y1pk058","staffId":"mn2n6bsrzvi","month":"Feb 2026","daysWorked":22,"halfDays":0,"fullDays":28,"fourDaysBonus":3,"totalDays":25,"basic":7875,"da":788,"incr":2200,"addlPay":0,"tiffin":0,"gross":10863,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":10863,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":10863,"status":"pending","note":"","saved":"23 Mar, 06:55 pm"},{"id":"mn37yfwe0c3","staffId":"mn2n9zhwif8","month":"Feb 2026","daysWorked":20,"halfDays":0,"fullDays":28,"fourDaysBonus":3,"totalDays":23,"basic":9200,"da":0,"incr":1000,"addlPay":0,"tiffin":0,"gross":10200,"lastAdv":0,"cashAdv":8500,"bankAdv":0,"payable":1700,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":1700,"status":"pending","note":"","saved":"23 Mar, 06:56 pm"},{"id":"mn37yrs3g3t","staffId":"mn2nb30k7xp","month":"Feb 2026","daysWorked":25,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":29,"basic":7975,"da":0,"incr":1250,"addlPay":0,"tiffin":0,"gross":9225,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":9225,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":9225,"status":"pending","note":"","saved":"23 Mar, 06:56 pm"},{"id":"mn37zdp98m0","staffId":"mn2nck2b0gy","month":"Feb 2026","daysWorked":27,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":31,"basic":12400,"da":0,"incr":1350,"addlPay":1350,"tiffin":0,"gross":15100,"lastAdv":0,"cashAdv":0,"bankAdv":5000,"payable":10100,"bankPay":9466,"pf":1092,"emi":0,"prevBal":0,"cashToPay":-458,"status":"pending","note":"","saved":"23 Mar, 06:56 pm"},{"id":"mn37zu4v2yu","staffId":"mn2ndsqmb7p","month":"Feb 2026","daysWorked":26,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":30,"basic":7500,"da":0,"incr":1300,"addlPay":0,"tiffin":0,"gross":8800,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":8800,"bankPay":0,"pf":0,"emi":833,"prevBal":0,"cashToPay":7967,"status":"pending","note":"","saved":"23 Mar, 06:57 pm"},{"id":"mn380fpbeip","staffId":"mn2r6vj02vx","month":"Feb 2026","daysWorked":25,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":29,"basic":14500,"da":1450,"incr":1375,"addlPay":0,"tiffin":0,"gross":17325,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":17325,"bankPay":11955,"pf":1455,"emi":0,"prevBal":0,"cashToPay":3915,"status":"pending","note":"","saved":"23 Mar, 06:57 pm"},{"id":"mn380xxisgp","staffId":"mn2r7ppxgxp","month":"Feb 2026","daysWorked":28,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":32,"basic":13600,"da":0,"incr":1400,"addlPay":0,"tiffin":0,"gross":15000,"lastAdv":0,"cashAdv":3000,"bankAdv":0,"payable":12000,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":12000,"status":"pending","note":"","saved":"23 Mar, 06:58 pm"},{"id":"mn381eile6r","staffId":"mn2r93birva","month":"Feb 2026","daysWorked":28,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":32,"basic":7040,"da":0,"incr":1400,"addlPay":1400,"tiffin":0,"gross":9840,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":9840,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":9840,"status":"pending","note":"","saved":"23 Mar, 06:58 pm"},{"id":"mn3821lt379","staffId":"mn2rlim5wxo","month":"Feb 2026","daysWorked":28,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":32,"basic":7200,"da":0,"incr":1400,"addlPay":0,"tiffin":0,"gross":8600,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":8600,"bankPay":6977,"pf":728,"emi":0,"prevBal":0,"cashToPay":895,"status":"pending","note":"","saved":"23 Mar, 06:58 pm"},{"id":"mn382v7edhh","staffId":"mn2rny1dbpu","month":"Feb 2026","daysWorked":28,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":32,"basic":12800,"da":0,"incr":1400,"addlPay":0,"tiffin":0,"gross":14200,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":9200,"bankPay":7959,"pf":1310,"emi":0,"prevBal":0,"cashToPay":-69,"status":"pending","note":"","saved":"23 Mar, 06:59 pm"},{"id":"mn383v3i9ib","staffId":"mn2rram9rz0","month":"Feb 2026","daysWorked":26,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":30,"basic":6600,"da":0,"incr":0,"addlPay":1000,"tiffin":0,"gross":7600,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":600,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":600,"status":"pending","note":"","saved":"23 Mar, 07:00 pm"},{"id":"mn385l3ctcr","staffId":"mn2rsviergy","month":"Feb 2026","daysWorked":24,"halfDays":0,"fullDays":28,"fourDaysBonus":0,"totalDays":24,"basic":24000,"da":0,"incr":0,"addlPay":0,"tiffin":0,"gross":24000,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":19000,"bankPay":15118,"pf":1917,"emi":0,"prevBal":0,"cashToPay":1965,"status":"pending","note":"","saved":"23 Mar, 07:01 pm"},{"id":"mn386agbyln","staffId":"mn2ru03wznw","month":"Feb 2026","daysWorked":26,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":30,"basic":5250,"da":0,"incr":1300,"addlPay":1300,"tiffin":0,"gross":7850,"lastAdv":0,"cashAdv":6000,"bankAdv":0,"payable":1850,"bankPay":0,"pf":0,"emi":0,"prevBal":6000,"cashToPay":-4150,"status":"pending","note":"","saved":"23 Mar, 07:02 pm"},{"id":"mn386gdxvok","staffId":"mn2ruxfmfaz","month":"Feb 2026","daysWorked":0,"halfDays":0,"fullDays":28,"fourDaysBonus":0,"totalDays":0,"basic":0,"da":0,"incr":0,"addlPay":11000,"tiffin":0,"gross":11000,"lastAdv":0,"cashAdv":0,"bankAdv":0,"payable":11000,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":11000,"status":"pending","note":"","saved":"23 Mar, 07:02 pm"},{"id":"mn387wnypiu","staffId":"mn2ry2g0hyx","month":"Feb 2026","daysWorked":30,"halfDays":0,"fullDays":28,"fourDaysBonus":0,"totalDays":30,"basic":9600,"da":0,"incr":0,"addlPay":1600,"tiffin":0,"gross":11200,"lastAdv":0,"cashAdv":5000,"bankAdv":0,"payable":6200,"bankPay":5972,"pf":874,"emi":0,"prevBal":0,"cashToPay":-646,"status":"pending","note":"","saved":"23 Mar, 07:03 pm"},{"id":"mn388eeezay","staffId":"mn2rz6d7ng7","month":"Feb 2026","daysWorked":27,"halfDays":0,"fullDays":28,"fourDaysBonus":4,"totalDays":31,"basic":8525,"da":0,"incr":1350,"addlPay":0,"tiffin":0,"gross":9875,"lastAdv":0,"cashAdv":9000,"bankAdv":0,"payable":875,"bankPay":0,"pf":0,"emi":0,"prevBal":0,"cashToPay":875,"status":"pending","note":"","saved":"23 Mar, 07:03 pm"},{"id":"mn388wh1u5n","staffId":"mn2s0gqgk8j","month":"Feb 2026","daysWorked":0,"halfDays":0,"fullDays":28,"fourDaysBonus":0,"totalDays":0,"basic":0,"da":0,"incr":0,"addlPay":15000,"tiffin":0,"gross":15000,"lastAdv":0,"cashAdv":7000,"bankAdv":0,"payable":8000,"bankPay":6455,"pf":1455,"emi":0,"prevBal":0,"cashToPay":90,"status":"pending","note":"","saved":"23 Mar, 07:04 pm"}],"midlog":[{"id":"mn2shchi347","staffId":"mn25fl1e8tv","month":"Mar 2026","date":"2026-03-15","type":"note","cash":25000,"bank":0,"note":"Advance now, no EMI","t":"23 Mar, 11:42 am"}],"actlog":[{"txt":"AlakhDeo Prasad | Feb 2026 | Gross:\u20b915,000 | Cash:\u20b990 [pending]","t":"23 Mar, 07:04 pm"},{"txt":"Kishan Khandelwal | Feb 2026 | Gross:\u20b99,875 | Cash:\u20b9875 [pending]","t":"23 Mar, 07:03 pm"},{"txt":"Doman Rajwar | Feb 2026 | Gross:\u20b911,200 | Cash:\u20b9-646 [pending]","t":"23 Mar, 07:03 pm"},{"txt":"Dilip Pathak | Feb 2026 | Gross:\u20b911,000 | Cash:\u20b911,000 [pending]","t":"23 Mar, 07:02 pm"},{"txt":"Shrikant Pal | Feb 2026 | Gross:\u20b97,850 | Cash:\u20b9-4,150 [pending]","t":"23 Mar, 07:02 pm"},{"txt":"Vikash Gupta | Feb 2026 | Gross:\u20b924,000 | Cash:\u20b91,965 [pending]","t":"23 Mar, 07:01 pm"},{"txt":"Ravinder Jee (Guard) | Feb 2026 | Gross:\u20b97,600 | Cash:\u20b9600 [pending]","t":"23 Mar, 07:00 pm"},{"txt":"Ganga Swarnkar | Feb 2026 | Gross:\u20b914,200 | Cash:\u20b9-69 [pending]","t":"23 Mar, 06:59 pm"},{"txt":"Suresh Saw | Feb 2026 | Gross:\u20b98,600 | Cash:\u20b9895 [pending]","t":"23 Mar, 06:58 pm"},{"txt":"Raju Kr Saw | Feb 2026 | Gross:\u20b99,840 | Cash:\u20b99,840 [pending]","t":"23 Mar, 06:58 pm"},{"txt":"Pradip Verma | Feb 2026 | Gross:\u20b915,000 | Cash:\u20b912,000 [pending]","t":"23 Mar, 06:58 pm"},{"txt":"Anup Pandit | Feb 2026 | Gross:\u20b917,325 | Cash:\u20b93,915 [pending]","t":"23 Mar, 06:57 pm"},{"txt":"Renu Yadav | Feb 2026 | Gross:\u20b98,800 | Cash:\u20b97,967 [pending]","t":"23 Mar, 06:57 pm"},{"txt":"Kamlesh Tiwari | Feb 2026 | Gross:\u20b915,100 | Cash:\u20b9-458 [pending]","t":"23 Mar, 06:56 pm"},{"txt":"Mamta Devi | Feb 2026 | Gross:\u20b99,225 | Cash:\u20b99,225 [pending]","t":"23 Mar, 06:56 pm"},{"txt":"Md. Raja Khan | Feb 2026 | Gross:\u20b910,200 | Cash:\u20b91,700 [pending]","t":"23 Mar, 06:56 pm"},{"txt":"Mahesh Modak | Feb 2026 | Gross:\u20b910,863 | Cash:\u20b910,863 [pending]","t":"23 Mar, 06:55 pm"},{"txt":"Md. Guddu Ansari | Feb 2026 | Gross:\u20b913,750 | Cash:\u20b9-30,350 [pending]","t":"23 Mar, 06:55 pm"},{"txt":"Haradhan Modak | Feb 2026 | Gross:\u20b99,185 | Cash:\u20b92,185 [pending]","t":"23 Mar, 06:54 pm"},{"txt":"Vicky Singh | Feb 2026 | Gross:\u20b913,800 | Cash:\u20b93,800 [pending]","t":"23 Mar, 06:53 pm"},{"txt":"Rajesh Bhadani | Feb 2026 | Gross:\u20b913,065 | Cash:\u20b9219 [pending]","t":"23 Mar, 06:53 pm"},{"txt":"Vikhan Ch. Dey | Feb 2026 | Gross:\u20b99,000 | Cash:\u20b9154 [pending]","t":"23 Mar, 06:52 pm"},{"txt":"Dilip Khandelwal | Feb 2026 | Gross:\u20b912,621 | Cash:\u20b9-3,349 [pending]","t":"23 Mar, 06:52 pm"},{"txt":"Subhash Keshri | Feb 2026 | Gross:\u20b98,058 | Cash:\u20b92,058 [pending]","t":"23 Mar, 06:51 pm"},{"txt":"Suraj Soni | Feb 2026 | Gross:\u20b95,495 | Cash:\u20b9-2,755 [pending]","t":"23 Mar, 06:51 pm"},{"txt":"Pappu Rawani | Feb 2026 | Gross:\u20b912,200 | Cash:\u20b91,642 [pending]","t":"23 Mar, 06:50 pm"},{"txt":"Ravi Pandit | Feb 2026 | Gross:\u20b912,210 | Cash:\u20b9-2,053 [pending]","t":"23 Mar, 06:50 pm"},{"txt":"Anand Sinha | Feb 2026 | Gross:\u20b96,800 | Cash:\u20b9-187 [pending]","t":"23 Mar, 06:49 pm"},{"txt":"Abhinandan Paswan | Feb 2026 | Gross:\u20b96,710 | Cash:\u20b9-6,290 [pending]","t":"23 Mar, 06:49 pm"},{"txt":"Rinku Bauri | Feb 2026 | Gross:\u20b99,350 | Cash:\u20b99,350 [pending]","t":"23 Mar, 06:48 pm"},{"txt":"Sangam Keshri | Feb 2026 | Gross:\u20b97,480 | Cash:\u20b9-1,366 [pending]","t":"23 Mar, 06:48 pm"},{"txt":"Sagar Rawani | Feb 2026 | Gross:\u20b96,160 | Cash:\u20b9-8,360 [pending]","t":"23 Mar, 06:47 pm"},{"txt":"Manish Chaudhary | Feb 2026 | Gross:\u20b96,050 | Cash:\u20b9-6,440 [pending]","t":"23 Mar, 06:46 pm"},{"txt":"Dhiraj Saw | Feb 2026 | Gross:\u20b913,390 | Cash:\u20b99,390 [pending]","t":"23 Mar, 06:46 pm"},{"txt":"Kartik Modak | Feb 2026 | Gross:\u20b914,630 | Cash:\u20b99,630 [pending]","t":"23 Mar, 06:46 pm"},{"txt":"Praveen Rawani | Feb 2026 | Gross:\u20b913,888 | Cash:\u20b9-529 [pending]","t":"23 Mar, 06:45 pm"},{"txt":"Ronit Srivastav (Golu) | Feb 2026 | Gross:\u20b98,030 | Cash:\u20b9-1,210 [pending]","t":"23 Mar, 06:45 pm"},{"txt":"Uma Shankar Gupta | Feb 2026 | Gross:\u20b910,148 | Cash:\u20b910,148 [pending]","t":"23 Mar, 06:44 pm"},{"txt":"Vicky Verma | Feb 2026 | Gross:\u20b98,960 | Cash:\u20b91,960 [pending]","t":"23 Mar, 06:44 pm"},{"txt":"Saurabh Mathur | Feb 2026 | Gross:\u20b912,960 | Cash:\u20b9-317 [pending]","t":"23 Mar, 06:43 pm"},{"txt":"Sunny Gupta | Feb 2026 | Gross:\u20b98,205 | Cash:\u20b9-14,425 [pending]","t":"23 Mar, 06:43 pm"},{"txt":"Sumit Bhadani | Feb 2026 | Gross:\u20b98,544 | Cash:\u20b93,544 [pending]","t":"23 Mar, 06:39 pm"},{"txt":"Ranjeet Rawani | Feb 2026 | Gross:\u20b94,110 | Cash:\u20b92,110 [pending]","t":"23 Mar, 06:39 pm"},{"txt":"Pramod Keshri | Feb 2026 | Gross:\u20b919,300 | Cash:\u20b94,300 [pending]","t":"23 Mar, 06:38 pm"},{"txt":"Santosh Rawani | Feb 2026 | Gross:\u20b911,400 | Cash:\u20b973 [pending]","t":"23 Mar, 06:38 pm"},{"txt":"Sanjay Dangaich | Feb 2026 | Gross:\u20b914,756 | Cash:\u20b9-244 [pending]","t":"23 Mar, 06:37 pm"},{"txt":"Rahul Kr. Das | Feb 2026 | Gross:\u20b911,190 | Cash:\u20b911,190 [pending]","t":"23 Mar, 06:36 pm"},{"txt":"Pawan Agarwal | Feb 2026 | Gross:\u20b912,470 | Cash:\u20b93,624 [pending]","t":"23 Mar, 06:36 pm"},{"txt":"Manu Rawani | Feb 2026 | Gross:\u20b94,980 | Cash:\u20b9-2,020 [pending]","t":"23 Mar, 06:35 pm"},{"txt":"Jitendra Gupta | Feb 2026 | Gross:\u20b911,598 | Cash:\u20b9-4,902 [pending]","t":"23 Mar, 06:35 pm"},{"txt":"Umesh Raut | Feb 2026 | Gross:\u20b913,080 | Cash:\u20b9-693 [pending]","t":"23 Mar, 06:34 pm"},{"txt":"Nawal Pd. Sinha | Feb 2026 | Gross:\u20b913,415 | Cash:\u20b9397 [pending]","t":"23 Mar, 06:33 pm"},{"txt":"Sanjay Raut | Feb 2026 | Gross:\u20b911,420 | Cash:\u20b918 [pending]","t":"23 Mar, 06:33 pm"},{"txt":"Raushan Verma | Feb 2026 | Gross:\u20b99,090 | Cash:\u20b91,090 [pending]","t":"23 Mar, 06:32 pm"},{"txt":"Vicky Singh | Feb 2026 | Gross:\u20b99,850 | Cash:\u20b9-6,378 [pending]","t":"23 Mar, 06:32 pm"},{"txt":"Subham Raut | Feb 2026 | Gross:\u20b98,200 | Cash:\u20b93,200 [pending]","t":"23 Mar, 06:28 pm"},{"txt":"Prakash Keshri | Feb 2026 | Gross:\u20b912,625 | Cash:\u20b94,625 [pending]","t":"23 Mar, 06:27 pm"},{"txt":"Jitendra Keshri | Feb 2026 | Gross:\u20b911,900 | Cash:\u20b9-121 [pending]","t":"23 Mar, 06:27 pm"},{"txt":"Jitu Pasi | Feb 2026 | Gross:\u20b99,780 | Cash:\u20b9280 [pending]","t":"23 Mar, 06:26 pm"},{"txt":"Pintu Saw | Feb 2026 | Gross:\u20b920,166 | Cash:\u20b9-15 [pending]","t":"23 Mar, 06:26 pm"},{"txt":"Amarnath Thakur | Feb 2026 | Gross:\u20b99,435 | Cash:\u20b94,435 [pending]","t":"23 Mar, 06:25 pm"},{"txt":"Md Samim Ansari | Feb 2026 | Gross:\u20b910,877 | Cash:\u20b91,460 [pending]","t":"23 Mar, 06:25 pm"},{"txt":"Vikram | Feb 2026 | Gross:\u20b910,345 | Cash:\u20b91,345 [pending]","t":"23 Mar, 06:24 pm"},{"txt":"Manoj Kumar Sinha | Feb 2026 | Gross:\u20b911,489 | Cash:\u20b9626 [pending]","t":"23 Mar, 06:24 pm"},{"txt":"Bansidhar Gope | Feb 2026 | Gross:\u20b910,854 | Cash:\u20b95,854 [pending]","t":"23 Mar, 06:24 pm"},{"txt":"Sunil Kumar | Feb 2026 | Gross:\u20b911,120 | Cash:\u20b9786 [pending]","t":"23 Mar, 06:23 pm"},{"txt":"Dhiren Verma | Feb 2026 | Gross:\u20b912,070 | Cash:\u20b9-2,930 [pending]","t":"23 Mar, 06:22 pm"},{"txt":"Pappu Paswan | Feb 2026 | Gross:\u20b913,402 | Cash:\u20b92,402 [pending]","t":"23 Mar, 06:22 pm"},{"txt":"Biru Bharti | Feb 2026 | Gross:\u20b98,221 | Cash:\u20b93,221 [pending]","t":"23 Mar, 06:22 pm"},{"txt":"Suraj Saw | Feb 2026 | Gross:\u20b99,930 | Cash:\u20b93,930 [pending]","t":"23 Mar, 06:21 pm"},{"txt":"Chhotan Das | Feb 2026 | Gross:\u20b910,930 | Cash:\u20b9-57 [pending]","t":"23 Mar, 06:20 pm"},{"txt":"Ajay Sharma | Feb 2026 | Gross:\u20b910,168 | Cash:\u20b9-246 [pending]","t":"23 Mar, 06:20 pm"},{"txt":"Ajay Keshri | Feb 2026 | Gross:\u20b910,260 | Cash:\u20b94,260 [pending]","t":"23 Mar, 06:19 pm"},{"txt":"Harish Verma | Feb 2026 | Gross:\u20b922,300 | Cash:\u20b92,265 [pending]","t":"23 Mar, 06:18 pm"},{"txt":"Sanjay Gupta | Feb 2026 | Gross:\u20b96,713 | Cash:\u20b9195 [pending]","t":"23 Mar, 06:16 pm"},{"txt":"Diwakar Sarkar | Feb 2026 | Gross:\u20b910,467 | Cash:\u20b9-91 [pending]","t":"23 Mar, 06:15 pm"},{"txt":"Chanchal Da | Feb 2026 | Gross:\u20b9425 | Cash:\u20b9425 [pending]","t":"23 Mar, 06:15 pm"},{"txt":"Vicky Rajak | Feb 2026 | Gross:\u20b910,125 | Cash:\u20b95,125 [pending]","t":"23 Mar, 06:14 pm"},{"txt":"Binod Kr. Rawani | Feb 2026 | Gross:\u20b911,070 | Cash:\u20b93,070 [pending]","t":"23 Mar, 06:14 pm"},{"txt":"Uttam Singh | Feb 2026 | Gross:\u20b910,233 | Cash:\u20b93,233 [pending]","t":"23 Mar, 06:13 pm"},{"txt":"Deepak Saw | Feb 2026 | Gross:\u20b925,540 | Cash:\u20b910,540 [pending]","t":"23 Mar, 06:13 pm"},{"txt":"Parmanand Paswan | Feb 2026 | Gross:\u20b915,628 | Cash:\u20b9351 [pending]","t":"23 Mar, 06:12 pm"},{"txt":"Anil Paswan | Feb 2026 | Gross:\u20b913,794 | Cash:\u20b9518 [pending]","t":"23 Mar, 06:11 pm"},{"txt":"Raju Kr Saw | Jan 2026 | Gross:\u20b910,479 | Cash:\u20b910,479 [pending]","t":"23 Mar, 12:07 pm"},{"txt":"Raju Kr Saw | Jan 2026 | Gross:\u20b910,160 | Cash:\u20b910,160 [pending]","t":"23 Mar, 12:06 pm"},{"txt":"AlakhDeo Prasad | Jan 2026 | Gross:\u20b915,000 | Cash:\u20b9-107 [pending]","t":"23 Mar, 12:06 pm"},{"txt":"Pradip Verma | Jan 2026 | Gross:\u20b914,763 | Cash:\u20b914,763 [pending]","t":"23 Mar, 11:48 am"},{"txt":"Kishan Khandelwal | Jan 2026 | Gross:\u20b910,850 | Cash:\u20b92,850 [pending]","t":"23 Mar, 11:48 am"},{"txt":"Doman Rajwar | Jan 2026 | Gross:\u20b911,200 | Cash:\u20b993 [pending]","t":"23 Mar, 11:48 am"},{"txt":"Dilip Pathak | Jan 2026 | Gross:\u20b911,000 | Cash:\u20b911,000 [pending]","t":"23 Mar, 11:47 am"}],"settings":{"daPct":10,"incrRate":55,"tiffinRate":70,"mdays":30},"_lastModified":1774696396900};
+var selStaffMonth=null;
+var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var NOW=new Date();
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+function fmt(n){return"\u20B9"+(Math.round(n||0)).toLocaleString("en-IN")}
+function fmtn(n){return(Math.round(n||0)).toLocaleString("en-IN")}
+function tstamp(){return new Date().toLocaleString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:true,day:"2-digit",month:"short"})}
+
+function openM(id){
+  if(id==="addAdv"){
+    var s=document.getElementById("adv-who");
+    s.innerHTML=D.staff.filter(function(x){return x.status==="active"}).map(function(x){return'<option value="'+x.id+'">'+x.empNo+" – "+x.name+"</option>"}).join("");
+    document.getElementById("adv-date").value=new Date().toISOString().split("T")[0];
+    var MNAMES=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var nextM=new Date(NOW.getFullYear(),NOW.getMonth()+1,1);
+    buildMonthDropdown("adv-startmonth", MNAMES[nextM.getMonth()]+" "+nextM.getFullYear());
+  }
+  if(id==="addLog"){
+    var s2=document.getElementById("lg-who");
+    s2.innerHTML=D.staff.filter(function(x){return x.status==="active"}).map(function(x){return'<option value="'+x.id+'">'+x.name+"</option>"}).join("");
+    document.getElementById("lg-date").value=new Date().toISOString().split("T")[0];
+  }
+  if(id==="settings")loadSettingsUI();
+  if(id==="addStaff"){
+    var daPctEl=document.getElementById("s-da-pct");
+    if(daPctEl)daPctEl.textContent=D.settings.daPct||10;
+  }
+  document.getElementById("ov-"+id).classList.add("open");
+}
+function closeM(id){document.getElementById("ov-"+id).classList.remove("open")}
+
+function editAdvOpen(id){
+  var a=D.advances.find(function(x){return x.id===id});if(!a)return;
+  var st=D.staff.find(function(x){return x.id===a.staffId});
+  document.getElementById("ea-id").value=id;
+  document.getElementById("ea-who").value=st?st.name+" ("+st.empNo+")":"Unknown";
+  document.getElementById("ea-amt").value=a.amount||"";
+  document.getElementById("ea-months").value=a.totalMonths||"";
+  document.getElementById("ea-emi").value=a.emi||"";
+  document.getElementById("ea-date").value=a.givenOn||"";
+  document.getElementById("ea-note").value=a.note||"";
+  buildMonthDropdown("ea-startmonth", a.startMonth||"");
+  document.getElementById("ov-editAdv").classList.add("open");
+}
+
+function calcEMIAutoEdit(){
+  var amt=parseFloat(document.getElementById("ea-amt").value)||0;
+  var mo=parseInt(document.getElementById("ea-months").value)||0;
+  if(amt>0&&mo>0)document.getElementById("ea-emi").value=Math.ceil(amt/mo);
+}
+
+function updateAdv(){
+  var id=document.getElementById("ea-id").value;
+  var a=D.advances.find(function(x){return x.id===id});if(!a)return;
+  a.amount=parseFloat(document.getElementById("ea-amt").value)||a.amount;
+  a.totalMonths=parseInt(document.getElementById("ea-months").value)||a.totalMonths;
+  a.emi=parseFloat(document.getElementById("ea-emi").value)||a.emi;
+  a.startMonth=document.getElementById("ea-startmonth").value;
+  a.givenOn=document.getElementById("ea-date").value;
+  a.note=document.getElementById("ea-note").value.trim();
+  addAct("Advance updated for "+(D.staff.find(function(x){return x.id===a.staffId})||{name:"staff"}).name);
+  closeM("editAdv");persist();renderAll();
+}
+
+function deleteAdv(id){
+  var a=D.advances.find(function(x){return x.id===id});if(!a)return;
+  var st=D.staff.find(function(x){return x.id===a.staffId});
+  if(!confirm("Delete this advance for "+(st?st.name:"staff")+"? This cannot be undone."))return;
+  D.advances=D.advances.filter(function(x){return x.id!==id});
+  addAct("Advance deleted for "+(st?st.name:"staff"));
+  persist();renderAll();
+}
+
+function reopenAdv(id){
+  var a=D.advances.find(function(x){return x.id===id});if(!a)return;
+  a.closed=false;
+  addAct("Advance reopened");
+  persist();renderAll();
+}
+
+function deleteEMIPayment(advId, idx){
+  var a=D.advances.find(function(x){return x.id===advId});if(!a)return;
+  if(!confirm("Delete this EMI payment record?"))return;
+  var removed=a.payments.splice(idx,1)[0];
+  if(removed&&removed.amt>0)a.paidEMIs=Math.max(0,(a.paidEMIs||0)-1);
+  if(a.closed&&a.paidEMIs<a.totalMonths)a.closed=false;
+  addAct("EMI payment deleted");
+  persist();renderAll();
+}
+
+function goTab(name,el){
+  document.querySelectorAll(".page").forEach(function(p){p.classList.remove("on")});
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("on")});
+  document.getElementById("page-"+name).classList.add("on");
+  el.classList.add("on");
+  renderAll();
+}
+
+function addAct(txt){
+  D.actlog.unshift({txt:txt,t:tstamp()});
+  if(D.actlog.length>100)D.actlog=D.actlog.slice(0,100);
+}
+
+// ── GOOGLE APPS SCRIPT URL ── paste your Web App URL here ──────
+// ── STORAGE ENGINE ──────────────────────────────────────────────
+var GAS_URL = "https://script.google.com/macros/s/AKfycbxhM9_pcIp3D1-DfTc9IxMhsgOKTsxVyZMG9fQ8EV3E4D8XiXIXHBaThHL_YTo2RI4a/exec";
+var GAS_READY = true;
+var saveTimer = null;
+var isSyncing = false;
+var localDirty = false;
+var pollPaused = false;
+var CHUNK_SIZE = 50000; // characters per chunk — safe for URL length
+
+function setSyncLabel(txt,bg,col){
+  var el=document.getElementById("syncLabel");if(!el)return;
+  el.textContent=txt;el.style.background=bg||"#e8f8ee";el.style.color=col||"#1a7a3c";
+}
+
+// ── JSONP helper ─────────────────────────────────────────────────
+function jsonpGet(url, callback, timeout){
+  var cbName="cb_"+Date.now()+"_"+Math.floor(Math.random()*9999);
+  var script=document.createElement("script");
+  var done=false;
+  var timer=setTimeout(function(){
+    if(!done){done=true;cleanup();callback(null);}
+  }, timeout||12000);
+  window[cbName]=function(r){if(!done){done=true;cleanup();callback(r);}};
+  function cleanup(){
+    clearTimeout(timer);delete window[cbName];
+    if(script.parentNode)script.parentNode.removeChild(script);
+  }
+  script.onerror=function(){if(!done){done=true;cleanup();callback(null);}};
+  script.src=url+(url.indexOf("?")>=0?"&":"?")+"callback="+cbName;
+  document.head.appendChild(script);
+}
+
+// ── LOAD ─────────────────────────────────────────────────────────
+function gasLoad(callback){
+  jsonpGet(GAS_URL+"?action=load", function(r){
+    if(r&&r.ok&&r.data&&r.data.staff){callback(r.data);}
+    else{callback(null);}
+  });
+}
+
+// ── SAVE (chunked JSONP) ─────────────────────────────────────────
+function gasSave(data, callback){
+  var json=JSON.stringify(data);
+  var chunks=[];
+  for(var i=0;i<json.length;i+=CHUNK_SIZE){
+    chunks.push(json.slice(i,i+CHUNK_SIZE));
+  }
+  var total=chunks.length;
+  var idx=0;
+  function sendNext(){
+    if(idx>=total){callback(true);return;}
+    var url=GAS_URL+"?action=save&chunks="+total+"&chunk="+idx
+            +"&payload="+encodeURIComponent(chunks[idx]);
+    jsonpGet(url, function(r){
+      if(r&&r.ok){idx++;sendNext();}
+      else{callback(false);}
+    }, 15000);
+  }
+  sendNext();
+}
+
+// ── PERSIST ──────────────────────────────────────────────────────
+function persist(){
+  D._lastModified=Date.now();
+  localDirty=true;
+  try{localStorage.setItem("pe_payroll",JSON.stringify(D));}catch(e){}
+  if(!GAS_READY){setSyncLabel("saved locally","#f7f7f7","#888");return;}
+  clearTimeout(saveTimer);
+  setSyncLabel("saving...","#fef5e4","#b36b00");
+  saveTimer=setTimeout(function(){
+    gasSave(D,function(ok){
+      if(ok){
+        localDirty=false;
+        try{localStorage.setItem("pe_payroll",JSON.stringify(D));}catch(e){}
+        setSyncLabel("synced \u2713","#e8f8ee","#1a7a3c");
+      } else {
+        setSyncLabel("save error — retrying","#fcebeb","#c0392b");
+      }
+    });
+  },1500);
+}
+
+// ── APPLY CLOUD ──────────────────────────────────────────────────
+function applyCloud(remote){
+  if(pollPaused)return;
+  if(localDirty){
+    gasSave(D,function(ok){
+      if(ok){localDirty=false;setSyncLabel("synced \u2713","#e8f8ee","#1a7a3c");}
+    });
+    return;
+  }
+  var rs=JSON.stringify(remote);
+  if(rs!==JSON.stringify(D)){
+    D=remote;
+    try{localStorage.setItem("pe_payroll",JSON.stringify(D));}catch(e){}
+    buildMonthSels();renderAll();
+  }
+  setSyncLabel("synced \u2713","#e8f8ee","#1a7a3c");
+}
+
+// ── LOAD DATA ────────────────────────────────────────────────────
+function loadData(){
+  // Show baked-in / localStorage data immediately
+  try{var s=localStorage.getItem("pe_payroll");if(s){var ls=JSON.parse(s);if(ls&&ls.staff&&ls.staff.length>D.staff.length)D=ls;}}catch(e){}
+  GAS_READY=(GAS_URL!=="PASTE_YOUR_WEB_APP_URL_HERE");
+  buildMonthSels();renderAll();
+  if(!GAS_READY){setSyncLabel("local only","#f7f7f7","#888");return;}
+  setSyncLabel("loading...","#fef5e4","#b36b00");
+  gasLoad(function(remote){
+    if(remote){
+      var remoteTs=remote._lastModified||0;
+      var localTs=D._lastModified||0;
+      if(remoteTs>=localTs){
+        D=remote;
+        try{localStorage.setItem("pe_payroll",JSON.stringify(D));}catch(e){}
+        localDirty=false;
+        buildMonthSels();renderAll();
+        setSyncLabel("synced \u2713","#e8f8ee","#1a7a3c");
+      } else {
+        // local is newer — push up
+        gasSave(D,function(ok){
+          setSyncLabel(ok?"synced \u2713":"save error","#e8f8ee","#1a7a3c");
+          if(ok)localDirty=false;
+        });
+      }
+    } else {
+      // Cloud empty or unreachable — push local up
+      if(D.staff&&D.staff.length){
+        gasSave(D,function(ok){
+          setSyncLabel(ok?"synced \u2713":"offline — local data","#e8f8ee","#1a7a3c");
+          if(ok)localDirty=false;
+        });
+      } else {
+        setSyncLabel("offline — local data","#fef5e4","#b36b00");
+      }
+    }
+  });
+  // Poll every 20 seconds
+  setInterval(function(){
+    if(!GAS_READY||isSyncing||pollPaused||localDirty)return;
+    isSyncing=true;
+    gasLoad(function(remote){
+      isSyncing=false;
+      if(remote)applyCloud(remote);
+    });
+  },20000);
+}
+// ────────────────────────────────────────────────────────────────
+
+function buildMonthSels(){
+  var html="";
+  for(var i=0;i<18;i++){
+    var d=new Date(NOW.getFullYear(),NOW.getMonth()-i,1);
+    var lbl=MONTHS[d.getMonth()]+" "+d.getFullYear();
+    html+='<option value="'+lbl+'">'+lbl+"</option>";
+  }
+  document.getElementById("selMonth").innerHTML=html;
+  document.getElementById("logMonth").innerHTML=html;
+  document.getElementById("sumMonth").innerHTML=html;
+}
+
+function getMonth(){return document.getElementById("selMonth").value}
+function getLogMonth(){return document.getElementById("logMonth").value}
+
+function loadSettingsUI(){
+  var c=D.settings;
+  document.getElementById("cfg-da").value=c.daPct||10;
+  document.getElementById("cfg-incr").value=c.incrRate||"";
+  document.getElementById("cfg-tiffin").value=c.tiffinRate||"";
+
+}
+
+function saveSettings(){
+  D.settings={
+    daPct:parseFloat(document.getElementById("cfg-da").value)||10,
+    incrRate:parseFloat(document.getElementById("cfg-incr").value)||0,
+    tiffinRate:parseFloat(document.getElementById("cfg-tiffin").value)||0,
+
+  };
+  addAct("Settings updated");
+  closeM("settings");
+  persist();
+  renderAll();
+}
+
+function calc4days(d){
+  if(d>=23)return 4;
+  if(d>=15)return 3;
+  if(d>=8)return 2;
+  if(d>=5)return 1;
+  return 0;
+}
+
+// STAFF
+function calcAddDayRate(){
+  var m=parseFloat(document.getElementById("s-monthly").value)||0;
+  var d=m?Math.round(m/34*100)/100:0;
+  document.getElementById("s-day-preview").textContent="\u20B9"+d.toLocaleString("en-IN");
+  document.getElementById("s-day").value=d||"";
+}
+function calcAddMonthly(){
+  var d=parseFloat(document.getElementById("s-day").value)||0;
+  var m=d?Math.round(d*34):0;
+  document.getElementById("s-monthly").value=m||"";
+  document.getElementById("s-day-preview").textContent="\u20B9"+d.toLocaleString("en-IN");
+}
+function calcEditDayRate(){
+  var m=parseFloat(document.getElementById("es-monthly").value)||0;
+  var d=m?Math.round(m/34*100)/100:0;
+  document.getElementById("es-day-preview").textContent="\u20B9"+d.toLocaleString("en-IN");
+  document.getElementById("es-day").value=d||"";
+}
+function calcEditMonthly(){
+  var d=parseFloat(document.getElementById("es-day").value)||0;
+  var m=d?Math.round(d*34):0;
+  document.getElementById("es-monthly").value=m||"";
+  document.getElementById("es-day-preview").textContent="\u20B9"+d.toLocaleString("en-IN");
+}
+
+function saveStaff(){
+  var name=document.getElementById("s-name").value.trim();
+  var emp=document.getElementById("s-emp").value.trim();
+  if(!name||!emp){alert("Name and employee number are required");return}
+  var tVal=parseFloat(document.getElementById("s-tiffin").value);
+  var iVal=parseFloat(document.getElementById("s-incrOverride").value);
+  var aVal=parseFloat(document.getElementById("s-addlValue").value);
+  var s={
+    id:uid(),empNo:emp,name:name,
+    shop:document.getElementById("s-shop").value.trim(),
+    dayRate:parseFloat(document.getElementById("s-day").value)||0,
+    monthlySalary:parseFloat(document.getElementById("s-monthly").value)||0,
+    da:document.getElementById("s-da").classList.contains("on"),
+    incr:document.getElementById("s-incr").classList.contains("on"),
+    incrOverride:isNaN(iVal)?null:iVal,
+    tiffinOverride:isNaN(tVal)?null:tVal,
+    addlType:document.getElementById("s-addlType").value,
+    addlValue:isNaN(aVal)?0:aVal,
+    status:document.getElementById("s-status").value
+  };
+  D.staff.push(s);
+  addAct(s.name+" ("+s.empNo+") added — Day rate: \u20B9"+s.dayRate+(s.monthlySalary?" (Monthly: \u20B9"+s.monthlySalary+")":""));
+  closeM("addStaff");
+  ["s-emp","s-name","s-shop","s-monthly","s-day","s-tiffin"].forEach(function(id){document.getElementById(id).value=""});
+  document.getElementById("s-day-preview").textContent="\u20B90";
+  document.getElementById("s-da").classList.add("on");
+  document.getElementById("s-incr").classList.add("on");
+  persist();renderAll();
+}
+
+function editStaffOpen(id){
+  var s=D.staff.find(function(x){return x.id===id});if(!s)return;
+  document.getElementById("es-id").value=id;
+  document.getElementById("es-emp").value=s.empNo||"";
+  document.getElementById("es-name").value=s.name||"";
+  document.getElementById("es-shop").value=s.shop||"";
+  document.getElementById("es-day").value=s.dayRate||"";
+  document.getElementById("es-monthly").value=s.monthlySalary||(s.dayRate?Math.round(s.dayRate*34):"");
+  document.getElementById("es-day-preview").textContent="\u20B9"+(s.dayRate||0).toLocaleString("en-IN");
+  document.getElementById("es-tiffin").value=s.tiffinOverride!=null?s.tiffinOverride:"";
+  document.getElementById("es-incrOverride").value=s.incrOverride!=null?s.incrOverride:"";
+  document.getElementById("es-addlType").value=s.addlType||"none";
+  document.getElementById("es-addlValue").value=s.addlValue||"";
+  document.getElementById("es-status").value=s.status||"active";
+  var daBtn=document.getElementById("es-da");
+  var incrBtn=document.getElementById("es-incr");
+  s.da?daBtn.classList.add("on"):daBtn.classList.remove("on");
+  s.incr?incrBtn.classList.add("on"):incrBtn.classList.remove("on");
+  openM("editStaff");
+}
+
+function updateStaff(){
+  var id=document.getElementById("es-id").value;
+  var s=D.staff.find(function(x){return x.id===id});if(!s)return;
+  var tVal=parseFloat(document.getElementById("es-tiffin").value);
+  var iVal=parseFloat(document.getElementById("es-incrOverride").value);
+  var aVal=parseFloat(document.getElementById("es-addlValue").value);
+  var oldDayRate=s.dayRate;
+  var oldMonthly=s.monthlySalary||0;
+  var newDayRate=parseFloat(document.getElementById("es-day").value)||0;
+  var newMonthly=parseFloat(document.getElementById("es-monthly").value)||0;
+  var newDA=document.getElementById("es-da").classList.contains("on");
+  var newIncr=document.getElementById("es-incr").classList.contains("on");
+  var salaryChanged=(newDayRate!==oldDayRate);
+
+  // Log old salary if changed
+  if(salaryChanged){
+    addAct(s.name+" salary changed: \u20B9"+oldDayRate+"/day"+(oldMonthly?" (\u20B9"+oldMonthly+"/mo)":"")
+      +" \u2192 \u20B9"+newDayRate+"/day"+(newMonthly?" (\u20B9"+newMonthly+"/mo)":""));
+  }
+
+  s.empNo=document.getElementById("es-emp").value.trim();
+  s.name=document.getElementById("es-name").value.trim();
+  s.shop=document.getElementById("es-shop").value.trim();
+  s.dayRate=newDayRate;
+  s.monthlySalary=newMonthly;
+  s.tiffinOverride=isNaN(tVal)?null:tVal;
+  s.incrOverride=isNaN(iVal)?null:iVal;
+  s.addlType=document.getElementById("es-addlType").value;
+  s.addlValue=isNaN(aVal)?0:aVal;
+  s.da=newDA;
+  s.incr=newIncr;
+  s.status=document.getElementById("es-status").value;
+
+  if(!salaryChanged){
+    addAct(s.name+" details updated");
+    // Only recalc past payrolls if non-salary params changed (DA/incr/tiffin)
+    recalcStaffPayrolls(id);
+  }
+  // If salary changed, do NOT recalc past payrolls — future entries will pick up new rate
+
+  closeM("editStaff");
+  persist();renderAll();
+}
+
+function deleteStaff(id){
+  var s=D.staff.find(function(x){return x.id===id});if(!s)return;
+  if(!confirm("Delete "+s.name+"?\n\nThis will also delete all their payroll entries and mid-month log entries. Advances will remain but be unlinked."))return;
+  D.staff=D.staff.filter(function(x){return x.id!==id});
+  D.payroll=D.payroll.filter(function(x){return x.staffId!==id});
+  D.midlog=D.midlog.filter(function(x){return x.staffId!==id});
+  addAct(s.name+" ("+s.empNo+") deleted");
+  persist();renderAll();
+}
+
+function recalcStaffPayrolls(sid){
+  var st=D.staff.find(function(x){return x.id===sid});if(!st)return;
+  var cfg=D.settings;
+  D.payroll.filter(function(p){return p.staffId===sid}).forEach(function(p){
+    var mdays=monthDaysFromLabel(p.month);
+    var days=p.daysWorked||0;
+    var half=p.halfDays||0;
+    var bonus=p.fourDaysBonus!=null?p.fourDaysBonus:calc4days(days);
+    var totalDays=days+bonus;
+    var fullDays=Math.max(0,mdays-half);
+    var basic=st.dayRate*totalDays;
+    var da=st.da?basic*(cfg.daPct||10)/100:0;
+    var incr=st.incr?staffIncrRate(st,cfg)*days:0;
+    var tRate=st.tiffinOverride!=null?st.tiffinOverride:(cfg.tiffinRate||0);
+    var tiffin=tRate*fullDays;
+    var autoAddl=staffAddlPay(st,days); var gross=basic+da+incr+(p.addlPay!=null?p.addlPay:autoAddl)+tiffin;
+    var payable=gross-(p.lastAdv||0)-(p.cashAdv||0)-(p.bankAdv||0);
+    var cash=payable-(p.bankPay||0)-(p.pf||0)-(p.emi||0);
+    p.fourDaysBonus=bonus;p.totalDays=totalDays;p.fullDays=fullDays;
+    p.basic=Math.round(basic);p.da=Math.round(da);p.incr=Math.round(incr);
+    p.tiffin=Math.round(tiffin);p.gross=Math.round(gross);
+    p.payable=Math.round(payable);p.cashToPay=Math.round(cash);
+  });
+}
+
+// ADVANCES
+function calcEMIAuto(){
+  var amt=parseFloat(document.getElementById("adv-amt").value)||0;
+  var mo=parseInt(document.getElementById("adv-months").value)||0;
+  if(amt>0&&mo>0)document.getElementById("adv-emi").value=Math.ceil(amt/mo);
+}
+
+function monthDaysFromLabel(label){
+  if(!label)return 26;
+  var parts=label.split(" ");
+  var mIdx=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(parts[0]);
+  if(mIdx<0)return 26;
+  return new Date(parseInt(parts[1]),mIdx+1,0).getDate();
+}
+function buildMonthDropdown(selId, selectedVal){
+  var MNAMES=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var html="";
+  for(var i=-12;i<=18;i++){
+    var dd=new Date(NOW.getFullYear(),NOW.getMonth()+i,1);
+    var lbl=MNAMES[dd.getMonth()]+" "+dd.getFullYear();
+    html+='<option value="'+lbl+'"'+(lbl===selectedVal?' selected':'')+'>'+lbl+"</option>";
+  }
+  document.getElementById(selId).innerHTML=html;
+}
+
+function monthLabelToYM(label){
+  if(!label)return null;
+  var parts=label.split(" ");
+  var mIdx=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(parts[0]);
+  if(mIdx<0)return null;
+  return {y:parseInt(parts[1]),m:mIdx};
+}
+
+function monthCompare(a,b){
+  // returns negative if a<b, 0 if equal, positive if a>b
+  var ya=a.y,ma=a.m,yb=b.y,mb=b.m;
+  if(ya!==yb)return ya-yb;
+  return ma-mb;
+}
+function staffActiveEMI(sid,month){
+  var cur=monthLabelToYM(month||getMonth());
+  if(!cur)return 0;
+  return D.advances.filter(function(a){
+    if(a.staffId!==sid||a.closed)return false;
+    if(a.startMonth){
+      var start=monthLabelToYM(a.startMonth);
+      if(start&&monthCompare(cur,start)<0)return false;
+    }
+    return true;
+  }).reduce(function(s,a){return s+a.emi},0);
+}
+
+function saveAdv(){
+  var who=document.getElementById("adv-who").value;
+  var amt=parseFloat(document.getElementById("adv-amt").value)||0;
+  if(!who||!amt){alert("Staff and amount are required");return}
+  var mo=parseInt(document.getElementById("adv-months").value)||0;
+  var emi=parseFloat(document.getElementById("adv-emi").value)||Math.ceil(amt/(mo||1));
+  var a={
+    id:uid(),staffId:who,amount:amt,totalMonths:mo,emi:emi,
+    givenOn:document.getElementById("adv-date").value,
+    startMonth:document.getElementById("adv-startmonth").value,
+    note:document.getElementById("adv-note").value.trim(),
+    paidEMIs:0,closed:false,payments:[]
+  };
+  D.advances.push(a);
+  var st=D.staff.find(function(x){return x.id===who});
+  addAct("Advance "+fmt(amt)+" \u2192 "+(st?st.name:"staff")+", EMI "+fmt(emi)+"/mo \u00d7"+mo);
+  closeM("addAdv");
+  ["adv-amt","adv-months","adv-note"].forEach(function(id){document.getElementById(id).value=""});
+  document.getElementById("adv-emi").value="";
+  persist();renderAll();
+}
+
+function markEMI(id){
+  var a=D.advances.find(function(x){return x.id===id});if(!a)return;
+  var custom=prompt("EMI for this month.\nStandard EMI: "+fmt(a.emi)+"\n\nEnter amount (0 to skip this month, blank for standard):");
+  if(custom===null)return;
+  var amt=custom.trim()===""?a.emi:parseFloat(custom)||0;
+  a.payments=a.payments||[];
+  a.payments.push({month:getMonth(),amt:amt,t:tstamp()});
+  if(amt>0)a.paidEMIs=(a.paidEMIs||0)+1;
+  if(a.paidEMIs>=a.totalMonths)a.closed=true;
+  var st=D.staff.find(function(x){return x.id===a.staffId});
+  addAct("EMI "+fmt(amt)+" \u2014 "+(st?st.name:"staff")+" ("+a.paidEMIs+"/"+a.totalMonths+")");
+  persist();renderAll();
+}
+
+function closeAdv(id){
+  var a=D.advances.find(function(x){return x.id===id});
+  if(!a||!confirm("Mark this advance as fully closed?"))return;
+  a.closed=true;
+  addAct("Advance closed");
+  persist();renderAll();
+}
+
+// MID-MONTH LOG
+function saveLogEntry(){
+  var who=document.getElementById("lg-who").value;
+  if(!who){alert("Select a staff member");return}
+  var entry={
+    id:uid(),staffId:who,
+    month:getLogMonth(),
+    date:document.getElementById("lg-date").value,
+    type:document.getElementById("lg-type").value,
+    cash:parseFloat(document.getElementById("lg-cash").value)||0,
+    bank:parseFloat(document.getElementById("lg-bank").value)||0,
+    note:document.getElementById("lg-note").value.trim(),
+    t:tstamp()
+  };
+  D.midlog.push(entry);
+  var st=D.staff.find(function(x){return x.id===who});
+  addAct("Log: "+(st?st.name:"staff")+" \u2014 "+(entry.cash||entry.bank?fmt(entry.cash+entry.bank):"note only"));
+  closeM("addLog");
+  document.getElementById("lg-cash").value="0";
+  document.getElementById("lg-bank").value="0";
+  document.getElementById("lg-note").value="";
+  persist();renderMidLog();
+}
+
+function delLogEntry(id){
+  if(!confirm("Delete this entry?"))return;
+  D.midlog=D.midlog.filter(function(x){return x.id!==id});
+  addAct("Log entry deleted");
+  persist();renderMidLog();
+}
+
+// PAYROLL
+function getLastMonthStr(month){
+  var opts=document.getElementById("selMonth").options;
+  for(var i=0;i<opts.length;i++){
+    if(opts[i].value===month){
+      if(i+1<opts.length)return opts[i+1].value;
+      return null;
+    }
+  }
+  return null;
+}
+
+function openPayrollFor(sid){
+  var st=D.staff.find(function(x){return x.id===sid});if(!st)return;
+  var month=getMonth();
+  document.getElementById("pr-title").textContent="Enter payroll \u2014 "+st.name+" ("+month+")";
+  document.getElementById("pr-sid").value=sid;
+  document.getElementById("pr-da-pct").textContent=D.settings.daPct||10;
+  document.getElementById("pr-mdays").value=monthDaysFromLabel(month);
+  var bonusEl=document.getElementById("pr-4days");
+  bonusEl.dataset.userEdited="0";
+  document.getElementById("pr-incr").dataset.userEdited="0";
+  document.getElementById("pr-addl").dataset.userEdited="0";
+
+  var existing=D.payroll.find(function(p){return p.staffId===sid&&p.month===month});
+  if(existing){
+    document.getElementById("pr-days").value=existing.daysWorked||0;
+    document.getElementById("pr-half").value=existing.halfDays||0;
+    bonusEl.value=existing.fourDaysBonus!=null?existing.fourDaysBonus:calc4days(existing.daysWorked||0);
+    bonusEl.dataset.userEdited="1";
+    document.getElementById("pr-incr").value=existing.incr||0;
+    document.getElementById("pr-incr").dataset.userEdited="1";
+    document.getElementById("pr-addl").value=existing.addlPay||0;
+    document.getElementById("pr-addl").dataset.userEdited="1";
+    document.getElementById("pr-addl").value=existing.addlPay||0;
+    document.getElementById("pr-cadv").value=existing.cashAdv||0;
+    document.getElementById("pr-badv").value=existing.bankAdv||0;
+    document.getElementById("pr-emi").value=existing.emi||0;
+    document.getElementById("pr-bank").value=existing.bankPay||0;
+    document.getElementById("pr-pf").value=existing.pf||0;
+    document.getElementById("pr-prevbal").value=existing.prevBal||0;
+    document.getElementById("pr-status").value=existing.status||"pending";
+    document.getElementById("pr-note").value=existing.note||"";
+    document.getElementById("pr-lastadv").value=existing.lastAdv||0;
+  } else {
+    document.getElementById("pr-days").value="";
+    document.getElementById("pr-half").value="0";
+    bonusEl.value="0";bonusEl.dataset.userEdited="0";
+    document.getElementById("pr-addl").value="0";
+    document.getElementById("pr-cadv").value="0";
+    document.getElementById("pr-badv").value="0";
+    document.getElementById("pr-bank").value="0";
+    document.getElementById("pr-pf").value="0";
+    document.getElementById("pr-prevbal").value="0";
+    document.getElementById("pr-status").value="pending";
+    document.getElementById("pr-note").value="";
+    document.getElementById("pr-emi").value=staffActiveEMI(sid,month);
+    var prevMonth=getLastMonthStr(month);
+    var lastAdv=prevMonth?D.midlog.filter(function(l){return l.staffId===sid&&l.month===prevMonth&&(l.type==="cash_advance"||l.type==="bank_advance")}).reduce(function(s,l){return s+(l.cash||0)+(l.bank||0)},0):0;
+    document.getElementById("pr-lastadv").value=lastAdv;
+    // Auto-fill previous month negative balance
+    var prevBal=0;
+    if(prevMonth){
+      var prevPr=D.payroll.find(function(p){return p.staffId===sid&&p.month===prevMonth;});
+      if(prevPr){var prevRounded=roundUp10(prevPr.cashToPay||0);if(prevRounded<0)prevBal=Math.abs(prevRounded);}
+    }
+    document.getElementById("pr-prevbal").value=prevBal;
+    if(prevBal>0){
+      var ph=document.getElementById("pr-prevbal-hint");
+      if(ph)ph.textContent="auto: negative balance from "+prevMonth;
+    }
+  }
+  calcPayroll();
+  document.getElementById("ov-payroll").classList.add("open");
+}
+
+function staffIncrRate(st,cfg){
+  return st.incrOverride!=null?st.incrOverride:(cfg.incrRate||0);
+}
+function staffAddlPay(st,days){
+  if(!st.addlType||st.addlType==="none")return 0;
+  if(st.addlType==="fixed")return st.addlValue||0;
+  if(st.addlType==="rate")return (st.addlValue||0)*days;
+  return 0;
+}
+function calcPayroll(){
+  var sid=document.getElementById("pr-sid").value;
+  var st=D.staff.find(function(x){return x.id===sid});if(!st)return;
+  var cfg=D.settings;
+  var mdays=parseInt(document.getElementById("pr-mdays").value)||26;
+  var days=parseFloat(document.getElementById("pr-days").value)||0;
+  var half=parseFloat(document.getElementById("pr-half").value)||0;
+  // 4-days bonus: auto-fill when days changes, but user can override
+  var bonusField=document.getElementById("pr-4days");
+  if(bonusField.dataset.userEdited!=="1"){
+    bonusField.value=calc4days(days);
+  }
+  var bonus=parseFloat(bonusField.value)||0;
+  var totalDays=days+bonus;
+  var fullDays=Math.max(0,mdays-half);
+  document.getElementById("pr-totaldays").value=totalDays;
+  document.getElementById("pr-full").value=fullDays;
+  var basic=st.dayRate*totalDays;
+  var da=st.da?basic*(cfg.daPct||10)/100:0;
+  var incrEl=document.getElementById("pr-incr");
+  if(incrEl.dataset.userEdited!=="1"){incrEl.value=Math.round(st.incr?staffIncrRate(st,cfg)*days:0);}
+  var incr=parseFloat(incrEl.value)||0;
+  var addlEl=document.getElementById("pr-addl");
+  var addlHint=document.getElementById("pr-addl-hint");
+  if(addlEl.dataset.userEdited!=="1"){
+    var autoAddl=staffAddlPay(st,days);
+    addlEl.value=autoAddl;
+  }
+  if(addlHint){
+    if(!st.addlType||st.addlType==="none")addlHint.textContent="manual";
+    else if(st.addlType==="fixed")addlHint.textContent="fixed: "+fmt(st.addlValue||0)+"/mo";
+    else addlHint.textContent="rate × days: "+fmt((st.addlValue||0))+" × "+days;
+  }
+  var addl=parseFloat(addlEl.value)||0;
+  var tRate=st.tiffinOverride!=null?st.tiffinOverride:(cfg.tiffinRate||0);
+  var tiffin=tRate*fullDays;
+  var gross=basic+da+incr+addl+tiffin;
+  document.getElementById("pr-basic").value=Math.round(basic);
+  document.getElementById("pr-da").value=Math.round(da);
+  document.getElementById("pr-tiffin").value=Math.round(tiffin);
+  document.getElementById("cb-basic").textContent=fmt(basic);
+  document.getElementById("cb-da").textContent=fmt(da);
+  document.getElementById("cb-incr").textContent=fmt(incr);
+  document.getElementById("cb-addl").textContent=fmt(addl);
+  document.getElementById("cb-tiffin").textContent=fmt(tiffin);
+  document.getElementById("cb-gross").textContent=fmt(gross);
+  var lastAdv=parseFloat(document.getElementById("pr-lastadv").value)||0;
+  var cadv=parseFloat(document.getElementById("pr-cadv").value)||0;
+  var badv=parseFloat(document.getElementById("pr-badv").value)||0;
+  var payable=gross-lastAdv-cadv-badv;
+  var bank=parseFloat(document.getElementById("pr-bank").value)||0;
+  var pf=parseFloat(document.getElementById("pr-pf").value)||0;
+  var emi=parseFloat(document.getElementById("pr-emi").value)||0;
+  var prevbal=parseFloat(document.getElementById("pr-prevbal").value)||0;
+  var cash=payable-bank-pf-emi-prevbal;
+  document.getElementById("cd-gross").textContent=fmt(gross);
+  document.getElementById("cd-lastadv").textContent=fmt(lastAdv);
+  document.getElementById("cd-cadv").textContent=fmt(cadv);
+  document.getElementById("cd-badv").textContent=fmt(badv);
+  document.getElementById("cd-payable").textContent=fmt(payable);
+  document.getElementById("cd-bank").textContent=fmt(bank);
+  document.getElementById("cd-pf").textContent=fmt(pf);
+  document.getElementById("cd-emi").textContent=fmt(emi);
+  document.getElementById("cd-prevbal").textContent=fmt(prevbal);
+  document.getElementById("cd-cash").textContent=fmt(cash);
+}
+
+function savePayroll(){
+  var sid=document.getElementById("pr-sid").value;
+  var st=D.staff.find(function(x){return x.id===sid});if(!st)return;
+  var month=getMonth();
+  var cfg=D.settings;
+  var mdays=parseInt(document.getElementById("pr-mdays").value)||26;
+  var days=parseFloat(document.getElementById("pr-days").value)||0;
+  var half=parseFloat(document.getElementById("pr-half").value)||0;
+  var bonus=parseFloat(document.getElementById("pr-4days").value)||0;
+  var totalDays=days+bonus;
+  var fullDays=Math.max(0,mdays-half);
+  var basic=st.dayRate*totalDays;
+  var da=st.da?basic*(cfg.daPct||10)/100:0;
+  var incr=parseFloat(document.getElementById("pr-incr").value)||0;
+  var addl=parseFloat(document.getElementById("pr-addl").value)||0;
+  var tRate=st.tiffinOverride!=null?st.tiffinOverride:(cfg.tiffinRate||0);
+  var tiffin=tRate*fullDays;
+  var gross=basic+da+incr+addl+tiffin;
+  var lastAdv=parseFloat(document.getElementById("pr-lastadv").value)||0;
+  var cadv=parseFloat(document.getElementById("pr-cadv").value)||0;
+  var badv=parseFloat(document.getElementById("pr-badv").value)||0;
+  var payable=gross-lastAdv-cadv-badv;
+  var bank=parseFloat(document.getElementById("pr-bank").value)||0;
+  var pf=parseFloat(document.getElementById("pr-pf").value)||0;
+  var emi=parseFloat(document.getElementById("pr-emi").value)||0;
+  var prevbal=parseFloat(document.getElementById("pr-prevbal").value)||0;
+  var cash=payable-bank-pf-emi-prevbal;
+  var entry={
+    id:uid(),staffId:sid,month:month,
+    daysWorked:days,halfDays:half,fullDays:fullDays,fourDaysBonus:bonus,totalDays:totalDays,
+    basic:Math.round(basic),da:Math.round(da),incr:Math.round(incr),
+    addlPay:addl,tiffin:Math.round(tiffin),gross:Math.round(gross),
+    lastAdv:lastAdv,cashAdv:cadv,bankAdv:badv,payable:Math.round(payable),
+    bankPay:bank,pf:pf,emi:emi,prevBal:prevbal,cashToPay:Math.round(cash),
+    status:document.getElementById("pr-status").value,
+    note:document.getElementById("pr-note").value.trim(),
+    saved:tstamp()
+  };
+  var idx=D.payroll.findIndex(function(p){return p.staffId===sid&&p.month===month});
+  if(idx>=0)D.payroll[idx]=entry;else D.payroll.push(entry);
+  if(entry.status==="paid"&&emi>0){
+    D.advances.filter(function(a){return a.staffId===sid&&!a.closed}).forEach(function(a){
+      a.payments=a.payments||[];
+      a.payments.push({month:month,amt:emi,t:tstamp()});
+      a.paidEMIs=(a.paidEMIs||0)+1;
+      if(a.paidEMIs>=a.totalMonths)a.closed=true;
+    });
+  }
+  addAct(st.name+" | "+month+" | Gross:"+fmt(gross)+" | Cash:"+fmt(cash)+" ["+entry.status+"]");
+  closeM("payroll");persist();renderAll();
+}
+
+// RENDERS
+
+function roundUp10(n){return Math.ceil(n/10)*10;}
+
+function renderMonthly(){
+  var active=D.staff.filter(function(s){return s.status==="active"});
+  if(!selStaffMonth||!active.find(function(s){return s.id===selStaffMonth})){
+    selStaffMonth=active.length?active[0].id:null;
+  }
+  var chips=document.getElementById("monthChips");
+  chips.innerHTML=active.map(function(s){
+    var hasPr=D.payroll.some(function(p){return p.staffId===s.id;});
+    return'<div class="chip'+(hasPr?" done":"")+( s.id===selStaffMonth?" on":"")
+      +'" onclick="pickMonthStaff(\''+s.id+'\')">'+( hasPr?"\u2713 ":"")+s.name+"</div>";
+  }).join("");
+  var sheet=document.getElementById("payrollSheet");
+  if(!active.length){sheet.innerHTML='<div class="card"><div class="empty">No active staff. Add staff first.</div></div>';return;}
+  if(!selStaffMonth){sheet.innerHTML="";return;}
+  var st=D.staff.find(function(s){return s.id===selStaffMonth});if(!st)return;
+  var entries=D.payroll.filter(function(p){return p.staffId===selStaffMonth;})
+    .sort(function(a,b){
+      var am=monthLabelToYM(a.month),bm=monthLabelToYM(b.month);
+      if(!am||!bm)return 0;
+      return monthCompare(bm,am);
+    });
+  var html='<div class="card">';
+  html+='<div class="card-hdr">';
+  html+='<div><span class="card-title">'+st.name+'</span> <span class="tag">'+st.empNo+'</span>'
+    +(st.shop?' <span class="tag">'+st.shop+'</span>':'')
+    +(st.dayRate?' <span class="tag">'+fmt(st.dayRate)+'/day</span>':'')+'</div>';
+  html+='<span style="font-size:11px;color:#bbb">Full history — enter payroll via Monthly payroll tab</span>';
+  html+='</div>';
+  if(!entries.length){
+    html+='<div class="empty">No payroll entries yet for '+st.name+'.<br>Click "+ New month entry" to add one.</div>';
+  } else {
+    html+='<div style="overflow-x:auto"><table><thead><tr>';
+    ["Month","Days","Half","Full","Bonus","Total days","Basic","DA","Incr","Addl","Tiffin","Gross",
+     "\u2212LastAdv","\u2212CashAdv","\u2212BankAdv","Payable","\u2212Bank","\u2212PF","\u2212EMI","\u2212PrevBal",
+     "Cash to pay","Rounded cash","Status"].forEach(function(h){html+="<th>"+h+"</th>";});
+    html+='</tr></thead><tbody>';
+    entries.forEach(function(pr){
+      var rounded=roundUp10(pr.cashToPay);
+      html+='<tr>'
+        +'<td><strong>'+pr.month+'</strong></td>'
+        +'<td>'+pr.daysWorked+'</td><td>'+pr.halfDays+'</td><td>'+pr.fullDays+'</td><td>'+(pr.fourDaysBonus!=null?pr.fourDaysBonus:0)+'</td><td><strong style="color:#1a5fa8">'+(pr.totalDays!=null?pr.totalDays:pr.daysWorked)+'</strong></td>'
+        +'<td>'+fmtn(pr.basic)+'</td><td>'+fmtn(pr.da)+'</td><td>'+fmtn(pr.incr)+'</td>'
+        +'<td>'+fmtn(pr.addlPay)+'</td><td>'+fmtn(pr.tiffin)+'</td>'
+        +'<td><strong>'+fmtn(pr.gross)+'</strong></td>'
+        +'<td style="color:#c0392b">'+fmtn(pr.lastAdv)+'</td>'
+        +'<td style="color:#c0392b">'+fmtn(pr.cashAdv)+'</td>'
+        +'<td style="color:#c0392b">'+fmtn(pr.bankAdv)+'</td>'
+        +'<td><strong>'+fmtn(pr.payable)+'</strong></td>'
+        +'<td style="color:#c0392b">'+fmtn(pr.bankPay)+'</td>'
+        +'<td style="color:#c0392b">'+fmtn(pr.pf)+'</td>'
+        +'<td style="color:#c0392b">'+fmtn(pr.emi)+'</td>'
+        +'<td style="color:#c0392b">'+fmtn(pr.prevBal||0)+'</td>'
+        +'<td>'+fmtn(pr.cashToPay)+'</td>'
+        +'<td>'+(rounded<0?'<strong style="color:#c0392b;font-size:13px">'+fmtn(rounded)+' <span style="font-size:9px;font-weight:400">carry fwd</span></strong>':'<strong style="color:#1a7a3c;font-size:13px">'+fmtn(rounded)+'</strong>')+'</td>'
+        +'<td><span class="badge '+pr.status+'">'+pr.status+'</span></td>'
+        +'</tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  html+='</div>';
+  sheet.innerHTML=html;
+}
+
+function pickMonthStaff(id){selStaffMonth=id;renderMonthly();}
+
+function editEntryMonth(sid,month){
+  var sel=document.getElementById("selMonth");
+  for(var i=0;i<sel.options.length;i++){
+    if(sel.options[i].value===month){sel.selectedIndex=i;break;}
+  }
+  openPayrollFor(sid);
+}
+
+function renderStaffTab(){
+  var tb=document.getElementById("staffTable");
+  if(!D.staff.length){tb.innerHTML='<tr><td colspan="8" class="empty">No staff added yet</td></tr>';return}
+  tb.innerHTML=D.staff.map(function(s){
+    return'<tr>'
+    +'<td><strong>'+s.empNo+'</strong></td>'
+    +'<td>'+s.name+'</td>'
+    +'<td>'+(s.shop||'—')+'</td>'
+    +'<td>'+fmt(s.dayRate)+'/day'+(s.monthlySalary?' <span style="color:#aaa;font-size:10px">(\u20B9'+Math.round(s.monthlySalary).toLocaleString("en-IN")+'/mo)</span>':'')+'</td>'
+    +'<td>'+(s.da?'<span class="badge paid">Yes</span>':'<span class="badge" style="background:#f5f5f5;color:#aaa">No</span>')+'</td>'
+    +'<td>'+(s.incr?'<span class="badge paid">Yes</span>':'<span class="badge" style="background:#f5f5f5;color:#aaa">No</span>')+'</td>'
+    +'<td>'+(s.addlType&&s.addlType!=="none"?'<span class="tag">'+(s.addlType==="fixed"?'Fixed \u20B9'+(s.addlValue||0):'Rate \u20B9'+(s.addlValue||0)+'/day')+'</span>':'—')+'</td>'
+    +'<td><span class="badge '+(s.status==="active"?"paid":"")+'">'+s.status+'</span></td>'
+    +'<td><button class="btn sm" onclick="editStaffOpen(\''+s.id+'\')">Edit</button> <button class="btn sm red" onclick="deleteStaff(\''+s.id+'\')">Delete</button></td>'
+    +'</tr>';
+  }).join("");
+}
+
+function renderAdvances(){
+  var el=document.getElementById("advList");
+  if(!D.advances.length){el.innerHTML='<div class="card"><div class="empty">No advances yet. Click "+ New advance" to add one.</div></div>';return}
+  var html="";
+  D.advances.forEach(function(a){
+    var st=D.staff.find(function(s){return s.id===a.staffId});
+    var paid=(a.payments||[]).reduce(function(s,p){return s+p.amt},0);
+    var rem=Math.max(0,a.amount-paid);
+    var pct=a.amount?Math.min(100,Math.round(paid/a.amount*100)):0;
+    var left=Math.max(0,(a.totalMonths||0)-(a.paidEMIs||0));
+    html+='<div class="card">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">';
+    html+='<div><div style="font-weight:700;font-size:14px">'+(st?st.name:"Unknown")+'<span style="font-weight:400;color:#aaa;font-size:11px"> \u00b7 '+(st?st.empNo:"")+'</span></div>';
+    html+='<div style="font-size:11px;color:#bbb;margin-top:2px">'+(a.note||"Advance")+" \u00b7 Given: "+(a.givenOn||"\u2014")+(a.startMonth?" \u00b7 EMI from: <strong style='color:#b36b00'>"+a.startMonth+"</strong>":"")+'</div></div>';
+    html+='<div style="display:flex;gap:6px;align-items:center">';
+    html+='<span class="badge '+(a.closed?"paid":"pending")+'">'+(a.closed?"closed":"active")+'</span>';
+    html+='<button class="btn sm" onclick="editAdvOpen(\''+a.id+'\')">Edit</button>';
+    html+='<button class="btn sm red" onclick="deleteAdv(\''+a.id+'\')">Delete</button>';
+    html+='</div></div>';
+    html+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:10px">';
+    html+='<div class="met"><div class="met-l">Advance</div><div class="met-v" style="font-size:16px">'+fmt(a.amount)+'</div></div>';
+    html+='<div class="met"><div class="met-l">EMI / mo</div><div class="met-v b" style="font-size:16px">'+fmt(a.emi)+'</div></div>';
+    html+='<div class="met"><div class="met-l">Paid</div><div class="met-v g" style="font-size:16px">'+fmt(paid)+'</div></div>';
+    html+='<div class="met"><div class="met-l">Outstanding</div><div class="met-v r" style="font-size:16px">'+fmt(rem)+'</div></div>';
+    html+='</div>';
+    html+='<div class="bar-wrap" style="height:8px"><div class="bar-inner" style="width:'+pct+'%"></div></div>';
+    html+='<div class="info-row" style="margin-top:4px"><span>'+(a.paidEMIs||0)+' of '+a.totalMonths+' EMIs paid ('+pct+'%)</span><span>'+left+' months remaining</span></div>';
+    if((a.payments||[]).length){
+      html+='<div style="margin-top:10px"><div class="sec-label">EMI payment history</div>';
+      a.payments.forEach(function(p,idx){
+        html+='<div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:5px 0;border-bottom:1px solid #f5f5f5">';
+        html+='<span style="color:#888">'+p.month+'</span>';
+        html+='<span style="font-weight:600">'+fmt(p.amt)+'</span>';
+        html+='<span style="color:#bbb">'+p.t+'</span>';
+        html+='<button class="btn sm red" onclick="deleteEMIPayment(\''+a.id+'\','+idx+')" style="padding:2px 7px;font-size:10px">\u2715</button>';
+        html+='</div>';
+      });
+      html+='</div>';
+    }
+    html+='<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">';
+    if(!a.closed){
+      html+='<button class="btn sm grn" onclick="markEMI(\''+a.id+'\')">+ Mark EMI paid</button>';
+      html+='<button class="btn sm red" onclick="closeAdv(\''+a.id+'\')">Mark closed</button>';
+    } else {
+      html+='<button class="btn sm" onclick="reopenAdv(\''+a.id+'\')">Reopen advance</button>';
+    }
+    html+='</div>';
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+
+function renderMidLog(){
+  var month=getLogMonth();
+  var entries=D.midlog.filter(function(l){return l.month===month});
+  var tb=document.getElementById("midLogBody");
+  var typeMap={cash_advance:"Cash Adv",bank_advance:"Bank Adv",expense:"Expense",note:"Note"};
+  if(!entries.length){tb.innerHTML='<tr><td colspan="7" class="empty">No entries for '+month+'</td></tr>';return}
+  tb.innerHTML=entries.map(function(l){
+    var st=D.staff.find(function(s){return s.id===l.staffId});
+    return'<tr>'
+    +'<td>'+l.date+'</td>'
+    +'<td><strong>'+(st?st.name:"—")+'</strong></td>'
+    +'<td><span class="tag">'+(typeMap[l.type]||l.type)+'</span></td>'
+    +'<td>'+(l.cash?'<strong>'+fmtn(l.cash)+'</strong>':"—")+'</td>'
+    +'<td>'+(l.bank?'<strong>'+fmtn(l.bank)+'</strong>':"—")+'</td>'
+    +'<td style="color:#888;max-width:200px;overflow:hidden;text-overflow:ellipsis">'+(l.note||"—")+'</td>'
+    +'<td><button class="btn sm red" onclick="delLogEntry(\''+l.id+'\')">&#10005;</button></td>'
+    +'</tr>';
+  }).join("");
+}
+
+function renderActLog(){
+  var el=document.getElementById("actLogList");
+  el.innerHTML=D.actlog.length?D.actlog.map(function(l){
+    return'<div style="display:flex;gap:9px;padding:8px 0;border-bottom:1px solid #f5f5f5;align-items:flex-start">'
+    +'<div style="width:6px;height:6px;border-radius:50%;background:#1a7a3c;margin-top:5px;flex-shrink:0"></div>'
+    +'<div><div style="font-size:12px">'+l.txt+'</div><div style="font-size:10px;color:#bbb;margin-top:1px">'+l.t+'</div></div>'
+    +'</div>';
+  }).join(""):'<div class="empty">No activity yet</div>';
+}
+
+function clearActLog(){if(!confirm("Clear all activity logs?"))return;D.actlog=[];persist();renderActLog()}
+function renderMonthSummary(){
+  var month=document.getElementById("sumMonth").value;
+  var sel=document.getElementById("selMonth");
+  for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===month){sel.selectedIndex=i;break;}}
+  var SHOP_ORDER=["PE","A1","A2","A3","A5","A6","A7","SD","GP","WH"];
+  var active=D.staff.filter(function(s){return s.status==="active"});
+  active.sort(function(a,b){
+    var sa=(a.shop||"").toUpperCase().trim(),sb=(b.shop||"").toUpperCase().trim();
+    var oi=SHOP_ORDER.indexOf(sa),oj=SHOP_ORDER.indexOf(sb);
+    if(oi===-1)oi=999;if(oj===-1)oj=999;
+    if(oi!==oj)return oi-oj;
+    var ea=(a.empNo||"").toLowerCase(),eb=(b.empNo||"").toLowerCase();
+    if(ea<eb)return -1;if(ea>eb)return 1;
+    return 0;
+  });
+  var tb=document.getElementById("sumBody");
+  var topEl=document.getElementById("sumTopTotals");
+  if(!active.length){
+    tb.innerHTML='<tr><td colspan="14" class="empty">No active staff yet</td></tr>';
+    document.getElementById("sumFoot").innerHTML="";
+    if(topEl)topEl.innerHTML="";
+    return;
+  }
+  var gGross=0,gCash=0,gBank=0,gPayable=0,gBankPay=0,gPF=0,gEMI=0,gCashPay=0,gRounded=0;
+  var shops=[],shopMap={};
+  active.forEach(function(s){
+    var shop=(s.shop||"—").toUpperCase().trim();
+    if(!shopMap[shop]){shopMap[shop]=[];shops.push(shop);}
+    shopMap[shop].push(s);
+  });
+  var rows="";
+  shops.forEach(function(shop){
+    var staffList=shopMap[shop];
+    var sGross=0,sCash=0,sBank=0,sPayable=0,sBankPay=0,sPF=0,sEMI=0,sCashPay=0,sRounded=0;
+    staffList.forEach(function(s){
+      var pr=D.payroll.find(function(p){return p.staffId===s.id&&p.month===month;});
+      var gross=pr?pr.gross:0,cashAdv=pr?pr.cashAdv:0,bankAdv=pr?pr.bankAdv:0;
+      var payable=pr?pr.payable:0,bankPay=pr?pr.bankPay:0,pf=pr?pr.pf:0;
+      var emi=pr?pr.emi:0,cashPay=pr?pr.cashToPay:0,rounded=roundUp10(cashPay);
+      var roundedForTotal=Math.max(0,rounded);
+      var status=pr?pr.status:"—";
+      sGross+=gross;sCash+=cashAdv;sBank+=bankAdv;
+      sPayable+=payable;sBankPay+=bankPay;sPF+=pf;sEMI+=emi;sCashPay+=cashPay;sRounded+=roundedForTotal;
+      rows+='<tr>'
+        +'<td>'+(s.shop||'—')+'</td><td><strong>'+s.empNo+'</strong></td><td>'+s.name+'</td>'
+        +'<td>'+(pr?fmtn(gross):'<span style="color:#bbb">—</span>')+'</td>'
+        +'<td style="color:'+(cashAdv?'#c0392b':'#bbb')+'">'+(pr?fmtn(cashAdv):'—')+'</td>'
+        +'<td style="color:'+(bankAdv?'#c0392b':'#bbb')+'">'+(pr?fmtn(bankAdv):'—')+'</td>'
+        +'<td>'+(pr?'<strong>'+fmtn(payable)+'</strong>':'<span style="color:#bbb">—</span>')+'</td>'
+        +'<td style="color:'+(bankPay?'#1a5fa8':'#bbb')+'">'+(pr?fmtn(bankPay):'—')+'</td>'
+        +'<td style="color:'+(pf?'#555':'#bbb')+'">'+(pr?fmtn(pf):'—')+'</td>'
+        +'<td style="color:'+(emi?'#7d5a00':'#bbb')+'">'+(pr?fmtn(emi):'—')+'</td>'
+        +'<td>'+(pr?fmtn(cashPay):'<span style="color:#bbb">—</span>')+'</td>'
+        +'<td>'+(pr?(rounded<0?'<strong style="color:#c0392b;font-size:13px">'+fmtn(rounded)+' <span style="font-size:9px;font-weight:400">carry fwd</span></strong>':'<strong style="color:#1a7a3c;font-size:13px">'+fmtn(rounded)+'</strong>'):'<span style="color:#bbb">—</span>')+'</td>'
+        +'<td>'+(pr?'<span class="badge '+status+'">'+status+'</span>':'<span style="color:#bbb">—</span>')+'</td>'
+        +'<td><button class="btn sm '+(pr?"":"p")+'" onclick="openPayrollFor(\''+s.id+'\')">'+(pr?'&#9998; Edit':'+ Enter')+'</button></td>'
+        +'</tr>';
+    });
+    rows+='<tr style="background:#e8f0fb;font-size:11px;font-weight:700">'
+      +'<td colspan="3" style="padding:6px 8px;color:#1a5fa8">'+shop+' total ('+staffList.length+')</td>'
+      +'<td style="padding:6px 8px">'+fmtn(sGross)+'</td>'
+      +'<td style="padding:6px 8px;color:#c0392b">'+fmtn(sCash)+'</td>'
+      +'<td style="padding:6px 8px;color:#c0392b">'+fmtn(sBank)+'</td>'
+      +'<td style="padding:6px 8px">'+fmtn(sPayable)+'</td>'
+      +'<td style="padding:6px 8px;color:#1a5fa8">'+fmtn(sBankPay)+'</td>'
+      +'<td style="padding:6px 8px">'+fmtn(sPF)+'</td>'
+      +'<td style="padding:6px 8px;color:#7d5a00">'+fmtn(sEMI)+'</td>'
+      +'<td style="padding:6px 8px">'+fmtn(sCashPay)+'</td>'
+      +'<td style="padding:6px 8px;color:#1a7a3c;font-weight:800">'+fmtn(sRounded)+'</td>'
+      +'<td colspan="2" style="padding:6px 8px"></td></tr>'
+      +'<tr style="height:7px;background:#f5f5f5"><td colspan="14"></td></tr>';
+    gGross+=sGross;gCash+=sCash;gBank+=sBank;
+    gPayable+=sPayable;gBankPay+=sBankPay;gPF+=sPF;gEMI+=sEMI;gCashPay+=sCashPay;gRounded+=sRounded;
+  });
+  tb.innerHTML=rows;
+  document.getElementById("sumFoot").innerHTML=''
+    +'<tr style="background:#111;color:#fff;font-weight:700;font-size:12px">'
+    +'<td colspan="3" style="padding:11px 8px">GRAND TOTAL ('+active.length+' staff)</td>'
+    +'<td style="padding:11px 8px">'+fmtn(gGross)+'</td>'
+    +'<td style="padding:11px 8px;color:#f5b7b1">'+fmtn(gCash)+'</td>'
+    +'<td style="padding:11px 8px;color:#f5b7b1">'+fmtn(gBank)+'</td>'
+    +'<td style="padding:11px 8px">'+fmtn(gPayable)+'</td>'
+    +'<td style="padding:11px 8px;color:#85b7eb">'+fmtn(gBankPay)+'</td>'
+    +'<td style="padding:11px 8px">'+fmtn(gPF)+'</td>'
+    +'<td style="padding:11px 8px;color:#fac775">'+fmtn(gEMI)+'</td>'
+    +'<td style="padding:11px 8px">'+fmtn(gCashPay)+'</td>'
+    +'<td style="padding:11px 8px;color:#9fe1cb;font-size:14px">'+fmtn(gRounded)+'</td>'
+    +'<td colspan="2" style="padding:11px 8px"></td></tr>';
+  if(topEl)topEl.innerHTML=''
+    +'<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-bottom:13px">'
+    +'<div class="met"><div class="met-l">Total gross</div><div class="met-v b">'+fmt(gGross)+'</div></div>'
+    +'<div class="met"><div class="met-l">Cash advances</div><div class="met-v r">'+fmt(gCash)+'</div></div>'
+    +'<div class="met"><div class="met-l">Bank advances</div><div class="met-v r">'+fmt(gBank)+'</div></div>'
+    +'<div class="met"><div class="met-l">Bank pay</div><div class="met-v b">'+fmt(gBankPay)+'</div></div>'
+    +'<div class="met" style="background:#1a7a3c"><div class="met-l" style="color:#9fe1cb">Cash to pay</div><div class="met-v" style="color:#fff;font-size:22px">'+fmt(gRounded)+'</div></div>'
+    +'</div>';
+}
+function renderAll(){renderMonthly();renderMonthSummary();renderStaffTab();renderAdvances();renderMidLog();renderActLog()}
+
+function checkReminder(){
+  var now=new Date();
+  var today=now.toISOString().split("T")[0];
+  var dismissed=localStorage.getItem("pe-reminder-dismissed");
+  if(dismissed===today)return; // already dismissed today
+
+  var items=[];
+  var dayOfMonth=now.getDate();
+
+  // After 25th — remind to run payroll and export backup
+  if(dayOfMonth>=25){
+    items.push("&#9744; Month-end approaching — have you entered payroll for all staff?");
+    items.push("&#9744; Click <strong>Export</strong> above to download a backup of your data");
+  }
+
+  // Check last export date
+  var lastExport=localStorage.getItem("pe-last-export");
+  if(!lastExport){
+    items.push("&#9744; You haven\u2019t exported a backup yet — click <strong>Export</strong> above now");
+  } else {
+    var daysSince=Math.floor((now-new Date(lastExport))/(1000*60*60*24));
+    if(daysSince>35){
+      items.push("&#9744; Last backup was "+daysSince+" days ago — click <strong>Export</strong> to save a fresh copy");
+    }
+  }
+
+  // Check sync status hint
+  if(GAS_READY){
+    items.push("&#9745; Google Sheets sync is active — your data is backed up automatically");
+  } else {
+    items.push("&#9744; Google Sheets sync not connected — data is local only, please export regularly");
+  }
+
+  if(items.length>0){
+    var banner=document.getElementById("reminderBanner");
+    document.getElementById("reminderItems").innerHTML=items.join("<br>");
+    banner.style.display="block";
+  }
+}
+
+function dismissReminder(){
+  var today=new Date().toISOString().split("T")[0];
+  localStorage.setItem("pe-reminder-dismissed",today);
+  document.getElementById("reminderBanner").style.display="none";
+}
+
+loadData();
+checkReminder();
+</script>
+</body>
+</html>
